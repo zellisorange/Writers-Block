@@ -714,24 +714,25 @@ The first draft is just you telling yourself the story."
         
     </div>
     
-    <!-- Supabase -->
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-        
+      <!-- Supabase Library (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Initialize Supabase -->
+    <script>
         const SUPABASE_URL = 'https://wwzhafvlqejccrskvwhb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3emhhZnZscWVqY2Nyc2t2d2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyOTk0MzgsImV4cCI6MjA4MTg3NTQzOH0.ajBE95GUoGNHmWiJ7WMFj0StVRrLd6Rp58I0sEh55pQ';
         
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         window.SupabaseAuth = {
             getUser: async () => {
-                const { data: { user } } = await supabase.auth.getUser();
+                const { data: { user } } = await _supabase.auth.getUser();
                 return user;
             },
-            client: supabase
+            client: _supabase
         };
         
-        window.dispatchEvent(new Event('supabase-ready'));
+        console.log('✦ Supabase ready');
     </script>
     
     <!-- Editor Script -->

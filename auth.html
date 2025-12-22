@@ -217,18 +217,21 @@
         
     </div>
     
-<!-- Supabase -->
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-        
+<!-- Supabase Library (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Initialize Supabase -->
+    <script>
         const SUPABASE_URL = 'https://wwzhafvlqejccrskvwhb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3emhhZnZscWVqY2Nyc2t2d2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyOTk0MzgsImV4cCI6MjA4MTg3NTQzOH0.ajBE95GUoGNHmWiJ7WMFj0StVRrLd6Rp58I0sEh55pQ';
         
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Create client using the global 'supabase' object from CDN
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
+        // Make auth functions available globally
         window.SupabaseAuth = {
             signUp: async (email, password, name) => {
-                const { data, error } = await supabase.auth.signUp({
+                const { data, error } = await _supabase.auth.signUp({
                     email, password,
                     options: { data: { name, tier: 'free' } }
                 });
@@ -236,33 +239,32 @@
                 return data;
             },
             signIn: async (email, password) => {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
                 if (error) throw error;
                 return data;
             },
             signOut: async () => {
-                const { error } = await supabase.auth.signOut();
+                const { error } = await _supabase.auth.signOut();
                 if (error) throw error;
                 return true;
             },
             getUser: async () => {
-                const { data: { user } } = await supabase.auth.getUser();
+                const { data: { user } } = await _supabase.auth.getUser();
                 return user;
             },
             resetPassword: async (email) => {
-                const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+                const { data, error } = await _supabase.auth.resetPasswordForEmail(email);
                 if (error) throw error;
                 return data;
             },
-            client: supabase
+            client: _supabase
         };
         
         console.log('✦ Supabase ready');
-        window.dispatchEvent(new Event('supabase-ready'));
     </script>
     
     <!-- Auth Script -->
     <script src="js/auth.js"></script>
     
 </body>
-</html><-- rebuild -->
+</html>

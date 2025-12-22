@@ -896,35 +896,36 @@
         
     </div>
     
-    <!-- Supabase -->
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-        
+ <!-- Supabase Library (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Initialize Supabase -->
+    <script>
         const SUPABASE_URL = 'https://wwzhafvlqejccrskvwhb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3emhhZnZscWVqY2Nyc2t2d2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyOTk0MzgsImV4cCI6MjA4MTg3NTQzOH0.ajBE95GUoGNHmWiJ7WMFj0StVRrLd6Rp58I0sEh55pQ';
         
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         window.SupabaseAuth = {
             signOut: async () => {
-                const { error } = await supabase.auth.signOut();
+                const { error } = await _supabase.auth.signOut();
                 if (error) throw error;
                 return true;
             },
             getUser: async () => {
-                const { data: { user } } = await supabase.auth.getUser();
+                const { data: { user } } = await _supabase.auth.getUser();
                 return user;
             },
-            client: supabase
+            client: _supabase
         };
         
-        window.dispatchEvent(new Event('supabase-ready'));
+        console.log('✦ Supabase ready');
     </script>
     
-    <!-- App Script -->
+<!-- App Script -->
     <script>
-        // Wait for Supabase
-        function initApp() {
+        // Wait for DOM to load
+        document.addEventListener('DOMContentLoaded', () => {
             console.log('✦ THE BLOCK Dashboard initializing...');
             
             // Check auth
@@ -935,22 +936,7 @@
             
             // Load data
             loadDashboardData();
-        }
-        
-        window.addEventListener('supabase-ready', initApp);
-        
-        // Check every 100ms for up to 5 seconds
-        let attempts = 0;
-        const checkSupabase = setInterval(() => {
-            attempts++;
-            if (window.SupabaseAuth) {
-                clearInterval(checkSupabase);
-                if (attempts > 1) initApp();
-            } else if (attempts > 50) {
-                clearInterval(checkSupabase);
-                console.error('✦ Supabase failed to load');
-            }
-        }, 100);
+        });
         
         // Auth check
         async function checkAuth() {
@@ -1027,23 +1013,18 @@
         
         // Load dashboard data
         function loadDashboardData() {
-            // Load from localStorage for now
             const projects = JSON.parse(localStorage.getItem('theblock_projects') || '[]');
-            const compost = JSON.parse(localStorage.getItem('theblock_compost') || '[]');
             
-            // Calculate stats
             let totalWords = 0;
             projects.forEach(p => {
                 const words = p.content ? p.content.trim().split(/\s+/).filter(w => w).length : 0;
                 totalWords += words;
             });
             
-            // Update UI
             document.getElementById('totalWords').textContent = totalWords.toLocaleString();
             document.getElementById('totalProjects').textContent = projects.length;
             document.getElementById('projectCount').textContent = projects.length;
             
-            // Calculate realm (1-9 based on total words)
             const realm = Math.min(9, Math.floor(totalWords / 1000) + 1);
             document.getElementById('currentRealm').textContent = realm;
             
@@ -1069,6 +1050,8 @@
             } else {
                 continueBtn.href = 'editor.html?new=true';
             }
+            
+            console.log('✦ Dashboard ready');
         }
     </script>
     
