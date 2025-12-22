@@ -999,9 +999,9 @@ The first draft is just you telling yourself the story."
                 }
             });
             
-            // AI Muse button
+// AI Muse button
             DOM.aiMuseBtn.addEventListener('click', () => {
-                alert('✨ The Muse is coming soon!\n\nPowered by Anthropic Claude & Google Gemini');
+                openMuseModal();
             });
             
             // Keyboard shortcuts
@@ -1040,6 +1040,322 @@ The first draft is just you telling yourself the story."
             
             autoSave();
         }
+
+
+        // =====================================================
+        // THE MUSE - AI Writing Assistant
+        // =====================================================
+        
+        function openMuseModal() {
+            // Create modal if it doesn't exist
+            if (!document.getElementById('museModal')) {
+                createMuseModal();
+            }
+            document.getElementById('museModal').classList.add('open');
+            document.getElementById('museInput').focus();
+        }
+        
+        function closeMuseModal() {
+            document.getElementById('museModal').classList.remove('open');
+        }
+        
+        function createMuseModal() {
+            const modal = document.createElement('div');
+            modal.id = 'museModal';
+            modal.className = 'muse-modal';
+            modal.innerHTML = `
+                <div class="muse-content">
+                    <div class="muse-header">
+                        <h2>✨ The Muse</h2>
+                        <button class="muse-close" onclick="closeMuseModal()">×</button>
+                    </div>
+                    <p class="muse-subtitle">Your AI creative partner • Powered by Claude & Gemini</p>
+                    
+                    <div class="muse-types">
+                        <button class="muse-type active" data-type="unstuck">🔓 Get Unstuck</button>
+                        <button class="muse-type" data-type="idea">💡 Expand Idea</button>
+                        <button class="muse-type" data-type="character">👤 Character</button>
+                        <button class="muse-type" data-type="plot">🎭 Plot Help</button>
+                        <button class="muse-type" data-type="worldbuilding">🌍 World Build</button>
+                        <button class="muse-type" data-type="dialogue">💬 Dialogue</button>
+                    </div>
+                    
+                    <textarea 
+                        id="museInput" 
+                        class="muse-input" 
+                        placeholder="What do you need help with? Describe your scene, character, or where you're stuck..."
+                    ></textarea>
+                    
+                    <div class="muse-actions">
+                        <select id="museModel" class="muse-model">
+                            <option value="claude">Claude (Deep)</option>
+                            <option value="gemini">Gemini (Fast)</option>
+                        </select>
+                        <button id="museAsk" class="muse-ask">Ask The Muse ✨</button>
+                    </div>
+                    
+                    <div id="museResponse" class="muse-response"></div>
+                    
+                    <div class="muse-footer">
+                        <span id="museCredits">10 / 10 free questions this month</span>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Add styles
+            const styles = document.createElement('style');
+            styles.textContent = `
+                .muse-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.85);
+                    backdrop-filter: blur(10px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 2000;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.3s ease;
+                }
+                .muse-modal.open {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                .muse-content {
+                    background: #0f0f12;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 16px;
+                    padding: 24px;
+                    width: 90%;
+                    max-width: 600px;
+                    max-height: 85vh;
+                    overflow-y: auto;
+                }
+                .muse-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                }
+                .muse-header h2 {
+                    font-size: 1.5rem;
+                    color: #f59e0b;
+                }
+                .muse-close {
+                    background: none;
+                    border: none;
+                    color: #a1a1aa;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                }
+                .muse-close:hover {
+                    color: white;
+                }
+                .muse-subtitle {
+                    color: #71717a;
+                    font-size: 0.85rem;
+                    margin-bottom: 20px;
+                }
+                .muse-types {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                    margin-bottom: 16px;
+                }
+                .muse-type {
+                    padding: 8px 12px;
+                    background: #1a1a1d;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 8px;
+                    color: #a1a1aa;
+                    font-size: 0.8rem;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .muse-type:hover, .muse-type.active {
+                    background: rgba(245,158,11,0.1);
+                    border-color: #f59e0b;
+                    color: #f59e0b;
+                }
+                .muse-input {
+                    width: 100%;
+                    min-height: 100px;
+                    background: #1a1a1d;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 8px;
+                    padding: 12px;
+                    color: white;
+                    font-size: 0.95rem;
+                    resize: vertical;
+                    margin-bottom: 16px;
+                }
+                .muse-input:focus {
+                    outline: none;
+                    border-color: #f59e0b;
+                }
+                .muse-actions {
+                    display: flex;
+                    gap: 12px;
+                    margin-bottom: 16px;
+                }
+                .muse-model {
+                    padding: 10px 16px;
+                    background: #1a1a1d;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 8px;
+                    color: white;
+                    cursor: pointer;
+                }
+                .muse-ask {
+                    flex: 1;
+                    padding: 12px 24px;
+                    background: linear-gradient(135deg, #f59e0b, #d97706);
+                    border: none;
+                    border-radius: 8px;
+                    color: #0a0a0b;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .muse-ask:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 20px rgba(245,158,11,0.3);
+                }
+                .muse-ask:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+                .muse-response {
+                    background: #1a1a1d;
+                    border-radius: 8px;
+                    padding: 16px;
+                    color: #e4e4e7;
+                    line-height: 1.7;
+                    display: none;
+                    white-space: pre-wrap;
+                }
+                .muse-response.show {
+                    display: block;
+                }
+                .muse-response.loading {
+                    display: block;
+                    color: #f59e0b;
+                    text-align: center;
+                }
+                .muse-footer {
+                    margin-top: 16px;
+                    text-align: center;
+                }
+                #museCredits {
+                    font-size: 0.75rem;
+                    color: #52525b;
+                }
+            `;
+            document.head.appendChild(styles);
+            
+            // Bind events
+            bindMuseEvents();
+        }
+        
+        function bindMuseEvents() {
+            // Type buttons
+            document.querySelectorAll('.muse-type').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.muse-type').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+            
+            // Ask button
+            document.getElementById('museAsk').addEventListener('click', askTheMuse);
+            
+            // Enter to submit
+            document.getElementById('museInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.metaKey) {
+                    askTheMuse();
+                }
+            });
+            
+            // Close on outside click
+            document.getElementById('museModal').addEventListener('click', (e) => {
+                if (e.target.id === 'museModal') {
+                    closeMuseModal();
+                }
+            });
+        }
+        
+        async function askTheMuse() {
+            const input = document.getElementById('museInput');
+            const response = document.getElementById('museResponse');
+            const askBtn = document.getElementById('museAsk');
+            const model = document.getElementById('museModel').value;
+            const type = document.querySelector('.muse-type.active')?.dataset.type || 'unstuck';
+            
+            const prompt = input.value.trim();
+            if (!prompt) {
+                input.focus();
+                return;
+            }
+            
+            // Show loading
+            askBtn.disabled = true;
+            askBtn.textContent = 'Thinking...';
+            response.className = 'muse-response loading';
+            response.textContent = '✨ The Muse is contemplating...';
+            
+            try {
+                const res = await fetch('/.netlify/functions/muse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt, type, model })
+                });
+                
+                const data = await res.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                response.className = 'muse-response show';
+                response.textContent = data.response;
+                
+                // Update credits (stored in localStorage)
+                updateMuseCredits();
+                
+            } catch (error) {
+                response.className = 'muse-response show';
+                response.textContent = '😔 The Muse encountered an issue: ' + error.message;
+            }
+            
+            askBtn.disabled = false;
+            askBtn.textContent = 'Ask The Muse ✨';
+        }
+        
+        function updateMuseCredits() {
+            const credits = JSON.parse(localStorage.getItem('theblock_muse_credits') || '{"count": 10, "month": "' + new Date().getMonth() + '"}');
+            const currentMonth = new Date().getMonth();
+            
+            // Reset if new month
+            if (credits.month !== currentMonth) {
+                credits.count = 10;
+                credits.month = currentMonth;
+            }
+            
+            // Decrement
+            credits.count = Math.max(0, credits.count - 1);
+            localStorage.setItem('theblock_muse_credits', JSON.stringify(credits));
+            
+            // Update display
+            document.getElementById('museCredits').textContent = `${credits.count} / 10 free questions this month`;
+        }
+
+
     </script>
     
 </body>
