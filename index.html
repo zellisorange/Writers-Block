@@ -1305,45 +1305,7 @@
         window.SupabaseAuth = window.LocalAuth;
         
         console.log('✦ Local Auth ready');
-        // New Project Modal Functions
-        function openNewProjectModal() {
-            document.getElementById('newProjectModal').style.display = 'flex';
-            document.getElementById('projectName').focus();
-        }
-
-        function closeNewProjectModal() {
-            document.getElementById('newProjectModal').style.display = 'none';
-            document.getElementById('projectName').value = '';
-        }
-
-        function createNewProjectFromModal() {
-            const title = document.getElementById('projectName').value.trim();
-            
-            if (!title) {
-                alert('Please enter a project title');
-                return;
-            }
-
-            const newProject = projectSwitcher.createAndSetProject(title);
-            closeNewProjectModal();
-            loadProjectSwitcher();
-            
-            alert(`✅ Project "${title}" created!`);
-        }
-
-        // Close modal on outside click
-        document.getElementById('newProjectModal').addEventListener('click', (e) => {
-            if (e.target.id === 'newProjectModal') {
-                closeNewProjectModal();
-            }
-        });
-
-        // Enter key to create
-        document.getElementById('projectName').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                createNewProjectFromModal();
-            }
-        });
+        
     </script>
     
 <!-- App Script -->
@@ -1599,10 +1561,48 @@
             document.getElementById('featureDesc').textContent = info.desc;
             document.getElementById('featureModal').classList.add('open');
         }
-        
-        function closeFeatureModal() {
-            document.getElementById('featureModal').classList.remove('open');
+// New Project Modal Functions
+        function openNewProjectModal() {
+            document.getElementById('newProjectModal').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('projectName').focus();
+            }, 100);
         }
+
+        function closeNewProjectModal() {
+            document.getElementById('newProjectModal').style.display = 'none';
+            document.getElementById('projectName').value = '';
+        }
+
+        function createNewProjectFromModal() {
+            const title = document.getElementById('projectName').value.trim();
+            
+            if (!title) {
+                alert('Please enter a project title');
+                return;
+            }
+
+            const newProject = projectSwitcher.createAndSetProject(title);
+            closeNewProjectModal();
+            loadProjectSwitcher();
+            
+            alert(`✅ Project "${title}" created!`);
+        }
+
+        // Close modal on outside click
+        document.getElementById('newProjectModal').addEventListener('click', (e) => {
+            if (e.target.id === 'newProjectModal') {
+                closeNewProjectModal();
+            }
+        });
+
+        // Enter key to create
+        document.getElementById('projectName').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                createNewProjectFromModal();
+            }
+        });
+        
     </script>
 <script src="js/project-switcher.js"></script>
 
