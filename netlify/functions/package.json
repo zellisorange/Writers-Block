@@ -1,0 +1,9 @@
+{
+  "name": "writers-block-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for THE BLOCK",
+  "main": "send-email.js",
+  "dependencies": {
+    "resend": "^3.0.0"
+  }
+}
