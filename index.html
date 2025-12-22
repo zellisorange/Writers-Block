@@ -743,6 +743,104 @@
         .pulse {
             animation: pulse-gold 2s ease-in-out infinite;
         }
+
+    .info-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.2s;
+        }
+        
+        .info-btn:hover {
+            opacity: 1;
+            color: var(--lux-gold);
+        }
+        
+        .feature-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        
+        .feature-modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .feature-content {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--lux-gold);
+            margin-bottom: 12px;
+        }
+        
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .feature-status {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--lux-gold);
+            border-radius: 20px;
+            color: var(--lux-gold);
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+        
+        .feature-close {
+            padding: 12px 32px;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .feature-close:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--lux-gold);
+        }
+
     </style>
 </head>
 <body>
@@ -1146,6 +1244,71 @@
             console.log('✦ Dashboard ready');
         }
     </script>
+    <!-- Feature Info Modal -->
+    <div class="feature-modal" id="featureModal" onclick="closeFeatureModal()">
+        <div class="feature-content" onclick="event.stopPropagation()">
+            <div class="feature-icon" id="featureIcon">🔮</div>
+            <div class="feature-title" id="featureTitle">The Vial</div>
+            <div class="feature-status" id="featureStatus">Coming Soon</div>
+            <div class="feature-desc" id="featureDesc">Description here</div>
+            <button class="feature-close" onclick="closeFeatureModal()">Got it!</button>
+        </div>
+    </div>
     
+    <script>
+        const featureInfo = {
+            vial: {
+                icon: '🔮',
+                title: 'The Vial',
+                status: 'Coming Soon',
+                desc: 'Your Creative DNA. Store your writing preferences, themes you love, and style fingerprint. The AI learns YOUR unique voice over time and adapts to help you write more authentically.'
+            },
+            loom: {
+                icon: '🧵',
+                title: 'The Loom',
+                status: 'Coming Soon',
+                desc: 'Plot Builder & Beat Sheets. Structure your story with proven frameworks (Save the Cat, 3-Act, Hero\'s Journey). Drag & drop scene cards, visualize timelines, and track character arcs.'
+            },
+            character: {
+                icon: '👥',
+                title: 'Character Deck',
+                status: 'Coming Soon',
+                desc: 'Deep character development. Create bio cards with personality, backstory, traits, and motivations. Build relationship webs and define how each character speaks.'
+            },
+            compost: {
+                icon: '🌱',
+                title: 'Compost Bin',
+                status: 'Coming Soon',
+                desc: 'Nothing is wasted! Deleted drafts become nutrients for future ideas. The AI mines your compost for inspiration, turning old fragments into new creative sparks.'
+            },
+            grimoire: {
+                icon: '📖',
+                title: 'The Grimoire',
+                status: 'Coming Soon',
+                desc: 'Your magical dictionary. Thesaurus, vocabulary tools, and "Psychedelic Synonym" mode for finding unexpected word choices. Genre-specific vocabulary at your fingertips.'
+            },
+            shelf: {
+                icon: '📚',
+                title: 'The Shelf',
+                status: 'Active',
+                desc: 'Your project library. All your drafts, stories, and works-in-progress organized in one place. Create new drafts, continue writing, and manage your creative portfolio.'
+            }
+        };
+        
+        function showFeatureInfo(feature) {
+            const info = featureInfo[feature];
+            if (!info) return;
+            
+            document.getElementById('featureIcon').textContent = info.icon;
+            document.getElementById('featureTitle').textContent = info.title;
+            document.getElementById('featureStatus').textContent = info.status;
+            document.getElementById('featureDesc').textContent = info.desc;
+            document.getElementById('featureModal').classList.add('open');
+        }
+        
+        function closeFeatureModal() {
+            document.getElementById('featureModal').classList.remove('open');
+        }
+    </script>
 </body>
 </html>
