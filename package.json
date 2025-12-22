@@ -1,0 +1,15 @@
+{
+  "name": "writers-block",
+  "version": "1.0.0",
+  "description": "THE BLOCK - Where Writer's Block Becomes Writer's Gift",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "resend": "^3.0.0"
+  },
+  "devDependencies": {}
+}
