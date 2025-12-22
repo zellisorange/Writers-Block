@@ -82,16 +82,28 @@ function init() {
 }
 
 // ============ AUTH CHECK ============
-function checkAuth() {
-    const user = localStorage.getItem('theblock_user');
-    if (!user) {
-        console.log('✦ No user found, redirecting to login...');
+async function checkAuth() {
+    try {
+        const user = await SupabaseAuth.getUser();
+        if (!user) {
+            console.log('✦ No user found, redirecting to login...');
+            window.location.href = 'auth.html';
+            return false;
+        }
+        AppState.user = {
+            id: user.id,
+            email: user.email,
+            name: user.user_metadata?.name || user.email.split('@')[0],
+            tier: user.user_metadata?.tier || 'free'
+        };
+        AppState.tier = AppState.user.tier;
+        console.log('✦ User authenticated:', AppState.user.email);
+        return true;
+    } catch (error) {
+        console.log('✦ Auth error, redirecting to login...');
         window.location.href = 'auth.html';
         return false;
     }
-    AppState.user = JSON.parse(user);
-    AppState.tier = localStorage.getItem('theblock_tier') || 'free';
-    return true;
 }
 
 // ============ USER DISPLAY ============
@@ -106,14 +118,20 @@ function updateUserDisplay() {
 }
 
 // ============ LOGOUT ============
-function handleLogout() {
+async function handleLogout() {
     if (confirm('Sign out of THE BLOCK?')) {
-        localStorage.removeItem('theblock_user');
-        localStorage.removeItem('theblock_tier');
-        console.log('✦ Logged out');
-        window.location.href = 'auth.html';
+        try {
+            await SupabaseAuth.signOut();
+            console.log('✦ Logged out');
+            window.location.href = 'auth.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Force redirect anyway
+            window.location.href = 'auth.html';
+        }
     }
 }
+
 
 // ============ EDITOR FUNCTIONS ============
 function initEditor() {

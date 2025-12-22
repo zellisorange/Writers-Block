@@ -1,28 +1,21 @@
 /* =====================================================
-   THE BLOCK - Auth System
-   Login / Signup / Password Reset
+   THE BLOCK - Auth System (Supabase)
+   Real Authentication with Cloud Database
    Part of BIG LOVE Holdings
    ===================================================== */
 
 // ============ DOM ELEMENTS ============
 const AuthDOM = {
-    // Forms
     signinForm: document.getElementById('signin-form'),
     signupForm: document.getElementById('signup-form'),
     forgotForm: document.getElementById('forgot-form'),
-    
-    // Form Elements
     formSignin: document.getElementById('form-signin'),
     formSignup: document.getElementById('form-signup'),
     formForgot: document.getElementById('form-forgot'),
-    
-    // Switch Links
     showSignup: document.getElementById('show-signup'),
     showSignin: document.getElementById('show-signin'),
     forgotPasswordLink: document.getElementById('forgot-password-link'),
     backToSignin: document.getElementById('back-to-signin'),
-    
-    // Social Buttons
     googleSignin: document.getElementById('google-signin'),
     googleSignup: document.getElementById('google-signup')
 };
@@ -35,17 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============ CHECK EXISTING SESSION ============
-function checkExistingSession() {
-    const user = localStorage.getItem('theblock_user');
-    if (user) {
-        // User already logged in, redirect to app
-        window.location.href = 'index.html';
+async function checkExistingSession() {
+    try {
+        const user = await SupabaseAuth.getUser();
+        if (user) {
+            console.log('✦ User already logged in:', user.email);
+            window.location.href = 'index.html';
+        }
+    } catch (error) {
+        console.log('✦ No existing session');
     }
 }
 
 // ============ BIND EVENTS ============
 function bindAuthEvents() {
-    // Form Submissions
     if (AuthDOM.formSignin) {
         AuthDOM.formSignin.addEventListener('submit', handleSignin);
     }
@@ -55,8 +51,6 @@ function bindAuthEvents() {
     if (AuthDOM.formForgot) {
         AuthDOM.formForgot.addEventListener('submit', handleForgotPassword);
     }
-    
-    // Switch Between Forms
     if (AuthDOM.showSignup) {
         AuthDOM.showSignup.addEventListener('click', (e) => {
             e.preventDefault();
@@ -81,8 +75,6 @@ function bindAuthEvents() {
             showForm('signin');
         });
     }
-    
-    // Google Auth
     if (AuthDOM.googleSignin) {
         AuthDOM.googleSignin.addEventListener('click', handleGoogleAuth);
     }
@@ -93,12 +85,10 @@ function bindAuthEvents() {
 
 // ============ SHOW/HIDE FORMS ============
 function showForm(formName) {
-    // Hide all forms
     AuthDOM.signinForm.classList.add('hidden');
     AuthDOM.signupForm.classList.add('hidden');
     AuthDOM.forgotForm.classList.add('hidden');
     
-    // Show requested form
     switch(formName) {
         case 'signin':
             AuthDOM.signinForm.classList.remove('hidden');
@@ -118,51 +108,27 @@ async function handleSignin(e) {
     
     const email = document.getElementById('signin-email').value.trim();
     const password = document.getElementById('signin-password').value;
-    
-    // Get submit button
     const submitBtn = e.target.querySelector('button[type="submit"]');
     
-    // Validate
     if (!email || !password) {
         showError('Please fill in all fields');
         return;
     }
     
-    // Show loading
     submitBtn.classList.add('loading');
     
     try {
-        // For now, we'll use localStorage (later integrate Firebase)
-        const users = JSON.parse(localStorage.getItem('theblock_users') || '[]');
-        const user = users.find(u => u.email === email);
+        const data = await SupabaseAuth.signIn(email, password);
+        console.log('✦ Signed in:', data.user.email);
+        showSuccess('Welcome back!');
         
-        if (!user) {
-            throw new Error('No account found with this email');
-        }
-        
-        if (user.password !== hashPassword(password)) {
-            throw new Error('Incorrect password');
-        }
-        
-        // Success! Save session
-        const session = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            tier: user.tier || 'free',
-            createdAt: user.createdAt
-        };
-        
-        localStorage.setItem('theblock_user', JSON.stringify(session));
-        localStorage.setItem('theblock_tier', session.tier);
-        
-        console.log('✦ Signed in:', session.email);
-        
-        // Redirect to app
-        window.location.href = 'index.html';
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 500);
         
     } catch (error) {
-        showError(error.message);
+        console.error('Sign in error:', error);
+        showError(error.message || 'Failed to sign in');
         submitBtn.classList.remove('loading');
     }
 }
@@ -174,10 +140,8 @@ async function handleSignup(e) {
     const name = document.getElementById('signup-name').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
-    
     const submitBtn = e.target.querySelector('button[type="submit"]');
     
-    // Validate
     if (!name || !email || !password) {
         showError('Please fill in all fields');
         return;
@@ -188,60 +152,26 @@ async function handleSignup(e) {
         return;
     }
     
-    if (!isValidEmail(email)) {
-        showError('Please enter a valid email');
-        return;
-    }
-    
-    // Show loading
     submitBtn.classList.add('loading');
     
     try {
-        // Check if user exists
-        const users = JSON.parse(localStorage.getItem('theblock_users') || '[]');
+        const data = await SupabaseAuth.signUp(email, password, name);
+        console.log('✦ Account created:', data);
         
-        if (users.find(u => u.email === email)) {
-            throw new Error('An account with this email already exists');
+        // Check if email confirmation is required
+        if (data.user && !data.session) {
+            showSuccess('Check your email to confirm your account!');
+            submitBtn.classList.remove('loading');
+        } else {
+            showSuccess('Account created!');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 500);
         }
         
-        // Create new user
-        const newUser = {
-            id: generateUserId(),
-            name: name,
-            email: email,
-            password: hashPassword(password),
-            tier: 'free',
-            createdAt: new Date().toISOString(),
-            aiUsage: {
-                lastReset: new Date().toISOString(),
-                daysUsed: 0,
-                onCooldown: false
-            }
-        };
-        
-        // Save user
-        users.push(newUser);
-        localStorage.setItem('theblock_users', JSON.stringify(users));
-        
-        // Create session
-        const session = {
-            id: newUser.id,
-            name: newUser.name,
-            email: newUser.email,
-            tier: newUser.tier,
-            createdAt: newUser.createdAt
-        };
-        
-        localStorage.setItem('theblock_user', JSON.stringify(session));
-        localStorage.setItem('theblock_tier', session.tier);
-        
-        console.log('✦ Account created:', session.email);
-        
-        // Redirect to app
-        window.location.href = 'index.html';
-        
     } catch (error) {
-        showError(error.message);
+        console.error('Sign up error:', error);
+        showError(error.message || 'Failed to create account');
         submitBtn.classList.remove('loading');
     }
 }
@@ -261,58 +191,40 @@ async function handleForgotPassword(e) {
     submitBtn.classList.add('loading');
     
     try {
-        // Simulate sending email (later integrate real email service)
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Show success
-        showSuccess('Reset link sent! Check your email.');
-        
-        console.log('✦ Password reset requested for:', email);
+        await SupabaseAuth.resetPassword(email);
+        showSuccess('Password reset link sent! Check your email.');
+        submitBtn.classList.remove('loading');
         
     } catch (error) {
-        showError('Failed to send reset email. Try again.');
-    } finally {
+        console.error('Reset error:', error);
+        showError(error.message || 'Failed to send reset email');
         submitBtn.classList.remove('loading');
     }
 }
 
 // ============ HANDLE GOOGLE AUTH ============
 async function handleGoogleAuth() {
-    // Placeholder for Google OAuth
-    // Later integrate Firebase Auth
-    
-    alert('✦ Google Sign-In\n\nComing soon!\n\nFor now, please use email/password.');
-    
-    console.log('✦ Google auth requested - Firebase integration needed');
-}
-
-// ============ UTILITIES ============
-function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function generateUserId() {
-    return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-}
-
-function hashPassword(password) {
-    // Simple hash for localStorage demo
-    // In production, use bcrypt on server side!
-    let hash = 0;
-    for (let i = 0; i < password.length; i++) {
-        const char = password.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
+    try {
+        const { data, error } = await SupabaseAuth.client.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.origin + '/index.html'
+            }
+        });
+        
+        if (error) throw error;
+        
+    } catch (error) {
+        console.error('Google auth error:', error);
+        showError('Google sign-in not configured yet');
     }
-    return 'hash_' + Math.abs(hash).toString(16);
 }
 
+// ============ TOAST NOTIFICATIONS ============
 function showError(message) {
-    // Remove any existing error
     const existingError = document.querySelector('.error-message-toast');
     if (existingError) existingError.remove();
     
-    // Create error toast
     const toast = document.createElement('div');
     toast.className = 'error-message-toast';
     toast.style.cssText = `
@@ -320,10 +232,10 @@ function showError(message) {
         top: 20px;
         right: 20px;
         padding: 16px 24px;
-        background: var(--accent-rose-soft, rgba(244, 63, 94, 0.15));
-        border: 1px solid var(--accent-rose, #f43f5e);
+        background: rgba(244, 63, 94, 0.15);
+        border: 1px solid #f43f5e;
         border-radius: 10px;
-        color: var(--accent-rose, #f43f5e);
+        color: #f43f5e;
         font-size: 14px;
         font-weight: 500;
         z-index: 1000;
@@ -332,7 +244,6 @@ function showError(message) {
     toast.textContent = message;
     document.body.appendChild(toast);
     
-    // Remove after 4 seconds
     setTimeout(() => {
         toast.style.animation = 'fadeOut 0.3s ease forwards';
         setTimeout(() => toast.remove(), 300);
@@ -340,11 +251,9 @@ function showError(message) {
 }
 
 function showSuccess(message) {
-    // Remove any existing message
     const existingMsg = document.querySelector('.success-message-toast');
     if (existingMsg) existingMsg.remove();
     
-    // Create success toast
     const toast = document.createElement('div');
     toast.className = 'success-message-toast';
     toast.style.cssText = `
@@ -352,10 +261,10 @@ function showSuccess(message) {
         top: 20px;
         right: 20px;
         padding: 16px 24px;
-        background: var(--accent-green-soft, rgba(16, 185, 129, 0.15));
-        border: 1px solid var(--accent-green, #10b981);
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid #10b981;
         border-radius: 10px;
-        color: var(--accent-green, #10b981);
+        color: #10b981;
         font-size: 14px;
         font-weight: 500;
         z-index: 1000;
@@ -364,14 +273,13 @@ function showSuccess(message) {
     toast.textContent = message;
     document.body.appendChild(toast);
     
-    // Remove after 4 seconds
     setTimeout(() => {
         toast.style.animation = 'fadeOut 0.3s ease forwards';
         setTimeout(() => toast.remove(), 300);
     }, 4000);
 }
 
-// ============ ADD FADEOUT ANIMATION ============
+// Add fadeOut animation
 const style = document.createElement('style');
 style.textContent = `
     @keyframes fadeOut {
@@ -381,12 +289,4 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ============ EXPORT ============
-window.TheBlockAuth = {
-    showForm,
-    handleSignin,
-    handleSignup,
-    handleGoogleAuth
-};
-
-console.log('✦ Auth system ready');
+console.log('✦ Auth system ready (Supabase)');
