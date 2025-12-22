@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050506">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>THE BLOCK | Settings</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #050506;
+            --bg-cosmos: #0a0a0b;
+            --bg-nebula: #0f0f12;
+            --bg-stardust: #161619;
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.06);
+            --lux-gold: #f59e0b;
+            --lux-amber: #fbbf24;
+            --lux-rose: #f43f5e;
+            --lux-violet: #8b5cf6;
+            --text-bright: #ffffff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+        
+        /* Zen Theme */
+        body.zen-theme {
+            --bg-void: #f5f1eb;
+            --bg-cosmos: #ebe6dc;
+            --bg-nebula: #e0d9cc;
+            --bg-stardust: #d4cdbf;
+            --bg-glass: rgba(0, 0, 0, 0.03);
+            --bg-glass-hover: rgba(0, 0, 0, 0.06);
+            --lux-gold: #5d7a5d;
+            --lux-amber: #7a956e;
+            --text-bright: #2c2c2c;
+            --text-primary: #3d3d3d;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            --glass-border: rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .settings-header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-cosmos);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-back:hover {
+            background: var(--bg-glass);
+            color: var(--lux-gold);
+        }
+        
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .header-spacer {
+            width: 80px;
+        }
+        
+        /* Settings Container */
+        .settings-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Section */
+        .settings-section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+        
+        .section-card {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        /* Settings Item */
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-item:hover {
+            background: var(--bg-glass-hover);
+        }
+        
+        .settings-item.danger:hover {
+            background: rgba(244, 63, 94, 0.1);
+        }
+        
+        .item-icon {
+            font-size: 1.3rem;
+            margin-right: 16px;
+            width: 32px;
+            text-align: center;
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .item-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .settings-item.danger .item-title {
+            color: var(--lux-rose);
+        }
+        
+        .item-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            width: 48px;
+            height: 28px;
+            background: var(--bg-stardust);
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .toggle-switch.active {
+            background: var(--lux-gold);
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .toggle-switch.active::after {
+            left: 23px;
+        }
+        
+        /* User Info Card */
+        .user-card {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--lux-gold), var(--lux-amber));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0a0a0b;
+            margin-right: 16px;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .user-email {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        .user-tier {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--lux-gold);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        
+        .modal-body {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        
+        .modal-body h3 {
+            color: var(--lux-gold);
+            font-size: 1rem;
+            margin: 20px 0 10px 0;
+        }
+        
+        .modal-body h3:first-child {
+            margin-top: 0;
+        }
+        
+        .modal-body p {
+            margin-bottom: 12px;
+        }
+        
+        .modal-body ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .modal-body li {
+            margin-bottom: 6px;
+        }
+        
+        .modal-body a {
+            color: var(--lux-gold);
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--lux-gold), var(--lux-amber));
+            border: none;
+            border-radius: 10px;
+            color: #0a0a0b;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--lux-rose), #e11d48);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 4px 20px rgba(244, 63, 94, 0.3);
+        }
+        
+        .btn-secondary {
+            width: 100%;
+            padding: 14px 24px;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 12px;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-glass-hover);
+        }
+        
+        /* Footer */
+        .settings-footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        
+        .settings-footer .version {
+            margin-bottom: 8px;
+        }
+        
+        .settings-footer .copyright {
+            color: var(--text-muted);
+        }
+        
+        .settings-footer .copyright span {
+            color: var(--lux-rose);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="settings-header">
+        <a href="index.html" class="btn-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+        </a>
+        <h1 class="header-title">Settings</h1>
+        <div class="header-spacer"></div>
+    </header>
+    
+    <!-- Settings Container -->
+    <div class="settings-container">
+        
+        <!-- User Card -->
+        <div class="user-card" id="userCard">
+            <div class="user-avatar" id="userAvatar">?</div>
+            <div class="user-info">
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-email" id="userEmail">...</div>
+                <div class="user-tier" id="userTier">FREE TIER</div>
+            </div>
+        </div>
+        
+        <!-- Account Section -->
+        <div class="settings-section">
+            <div class="section-title">Account</div>
+            <div class="section-card">
+                <div class="settings-item" onclick="openModal('upgradeModal')">
+                    <span class="item-icon">⭐</span>
+                    <div class="item-content">
+                        <div class="item-title">Upgrade to Pro</div>
+                        <div class="item-subtitle">$4.20/month • Unlimited AI & Projects</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+                <div class="settings-item" onclick="openModal('editProfileModal')">
+                    <span class="item-icon">👤</span>
+                    <div class="item-content">
+                        <div class="item-title">Edit Profile</div>
+                        <div class="item-subtitle">Name, email, password</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Preferences Section -->
+        <div class="settings-section">
+            <div class="section-title">Preferences</div>
+            <div class="section-card">
+                <div class="settings-item" onclick="toggleTheme()">
+                    <span class="item-icon">🎨</span>
+                    <div class="item-content">
+                        <div class="item-title">Theme</div>
+                        <div class="item-subtitle" id="themeStatus">Midnight (Dark)</div>
+                    </div>
+                    <div class="toggle-switch" id="themeToggle"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Help & Support Section -->
+        <div class="settings-section">
+            <div class="section-title">Help & Support</div>
+            <div class="section-card">
+                <div class="settings-item" onclick="openModal('contactModal')">
+                    <span class="item-icon">📧</span>
+                    <div class="item-content">
+                        <div class="item-title">Contact Us</div>
+                        <div class="item-subtitle">Get help or send feedback</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+                <div class="settings-item" onclick="openModal('faqModal')">
+                    <span class="item-icon">❓</span>
+                    <div class="item-content">
+                        <div class="item-title">FAQ</div>
+                        <div class="item-subtitle">Frequently asked questions</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- About Section -->
+        <div class="settings-section">
+            <div class="section-title">About</div>
+            <div class="section-card">
+                <div class="settings-item" onclick="openModal('aboutModal')">
+                    <span class="item-icon">📖</span>
+                    <div class="item-content">
+                        <div class="item-title">About THE BLOCK</div>
+                        <div class="item-subtitle">Our mission and story</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+                <div class="settings-item" onclick="openModal('aiModal')">
+                    <span class="item-icon">🤖</span>
+                    <div class="item-content">
+                        <div class="item-title">AI Information</div>
+                        <div class="item-subtitle">Powered by Claude & Gemini</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+                <div class="settings-item" onclick="openModal('termsModal')">
+                    <span class="item-icon">📜</span>
+                    <div class="item-content">
+                        <div class="item-title">Terms of Service</div>
+                        <div class="item-subtitle">User agreement</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+                <div class="settings-item" onclick="openModal('privacyModal')">
+                    <span class="item-icon">🔒</span>
+                    <div class="item-content">
+                        <div class="item-title">Privacy Policy</div>
+                        <div class="item-subtitle">How we handle your data</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Danger Zone -->
+        <div class="settings-section">
+            <div class="section-title">Danger Zone</div>
+            <div class="section-card">
+                <div class="settings-item" onclick="signOut()">
+                    <span class="item-icon">🚪</span>
+                    <div class="item-content">
+                        <div class="item-title">Sign Out</div>
+                        <div class="item-subtitle">Log out of your account</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+                <div class="settings-item danger" onclick="openModal('deleteModal')">
+                    <span class="item-icon">🗑️</span>
+                    <div class="item-content">
+                        <div class="item-title">Delete Account</div>
+                        <div class="item-subtitle">Permanently remove all data</div>
+                    </div>
+                    <span class="item-arrow">›</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="settings-footer">
+            <div class="version">THE BLOCK v1.0.0</div>
+            <div class="copyright">Made with <span>♥</span> by BIG LOVE Holdings</div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">About THE BLOCK</h2>
+                <button class="modal-close" onclick="closeModal('aboutModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>THE BLOCK</strong> is where Writer's Block becomes Writer's Gift.</p>
+                
+                <p>We believe that every creative block is actually an opportunity waiting to be discovered. Our platform is designed to help writers of all levels overcome obstacles and unlock their creative potential.</p>
+                
+                <h3>Our Mission</h3>
+                <p>To empower writers globally by providing intelligent tools that nurture creativity, not replace it. We're building a safe, welcoming space where people worldwide can feel valued, appreciated, and overjoyed to be part of a creative community.</p>
+                
+                <h3>The Vision</h3>
+                <p>We see what the pioneers saw - the early days of a new creative renaissance. To run after one's own dreams is not a fool's errand but one of great nobility and the greatest adventures a person can have.</p>
+                
+                <h3>Part of Something Bigger</h3>
+                <p>THE BLOCK is part of the BIG LOVE Holdings ecosystem, alongside ELGS (music production), PRISM (artist search), and LYRIC BIRD.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AI Information Modal -->
+    <div class="modal" id="aiModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🤖 AI Information</h2>
+                <button class="modal-close" onclick="closeModal('aiModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <p>THE BLOCK uses ethical AI to enhance your creativity, not replace it.</p>
+                
+                <h3>Powered By</h3>
+                
+                <p><strong>🟤 Anthropic Claude</strong></p>
+                <p>Claude is an AI assistant created by Anthropic, focused on being helpful, harmless, and honest. We use Claude for deep, thoughtful creative assistance - perfect for character development, plot exploration, and nuanced writing guidance.</p>
+                
+                <p><strong>🔵 Google Gemini</strong></p>
+                <p>Gemini is Google's most capable AI model. We use Gemini for fast suggestions, quick brainstorming, and rapid idea generation when you need immediate creative sparks.</p>
+                
+                <h3>Our AI Ethics</h3>
+                <ul>
+                    <li>AI assists, never replaces your creativity</li>
+                    <li>Your content remains 100% yours</li>
+                    <li>We don't train AI on your writing without consent</li>
+                    <li>AI suggestions are clearly labeled</li>
+                    <li>You control when and how AI helps you</li>
+                </ul>
+                
+                <h3>The Muse</h3>
+                <p>"The Muse" is our AI creative partner that combines both Claude and Gemini to give you the best of both worlds - thoughtful depth and quick inspiration whenever you need it.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Terms of Service Modal -->
+    <div class="modal" id="termsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Terms of Service</h2>
+                <button class="modal-close" onclick="closeModal('termsModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Effective Date:</strong> December 2025</p>
+                
+                <h3>1. Acceptance of Terms</h3>
+                <p>By using THE BLOCK, you agree to these terms. If you don't agree, please don't use our service.</p>
+                
+                <h3>2. Your Content</h3>
+                <p>You own everything you write. We claim no ownership over your creative work. Your stories, characters, and ideas belong to you.</p>
+                
+                <h3>3. AI Assistance</h3>
+                <p>AI-generated suggestions are provided as creative aids. You're responsible for reviewing and modifying any AI content you use. AI outputs are not guaranteed to be unique or error-free.</p>
+                
+                <h3>4. Acceptable Use</h3>
+                <p>You agree not to:</p>
+                <ul>
+                    <li>Use the service for illegal purposes</li>
+                    <li>Generate harmful, hateful, or abusive content</li>
+                    <li>Attempt to breach our security</li>
+                    <li>Share your account with others</li>
+                </ul>
+                
+                <h3>5. Subscriptions</h3>
+                <p>Free tier: 3 projects, 10 AI interactions/month. Pro tier ($4.20/month): Unlimited access. Cancel anytime.</p>
+                
+                <h3>6. Termination</h3>
+                <p>We may suspend accounts that violate these terms. You may delete your account at any time.</p>
+                
+                <h3>7. Changes</h3>
+                <p>We may update these terms. Continued use means acceptance of changes.</p>
+                
+                <p><em>Questions? Contact us at support@thewritersblock.llc</em></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Privacy Policy Modal -->
+    <div class="modal" id="privacyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Privacy Policy</h2>
+                <button class="modal-close" onclick="closeModal('privacyModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Effective Date:</strong> December 2025</p>
+                
+                <h3>What We Collect</h3>
+                <ul>
+                    <li><strong>Account info:</strong> Email, name (when you sign up)</li>
+                    <li><strong>Your content:</strong> Stories, drafts, notes (stored locally)</li>
+                    <li><strong>Usage data:</strong> Features used, pages visited</li>
+                </ul>
+                
+                <h3>How We Use It</h3>
+                <ul>
+                    <li>To provide and improve the service</li>
+                    <li>To sync your content across devices (Pro users)</li>
+                    <li>To send important service updates</li>
+                </ul>
+                
+                <h3>What We DON'T Do</h3>
+                <ul>
+                    <li>❌ Sell your data to third parties</li>
+                    <li>❌ Train AI on your writing without consent</li>
+                    <li>❌ Share your content with anyone</li>
+                    <li>❌ Send marketing spam</li>
+                </ul>
+                
+                <h3>Data Storage</h3>
+                <p>Free tier: Data stored locally on your device. Pro tier: Encrypted cloud backup available.</p>
+                
+                <h3>Your Rights</h3>
+                <ul>
+                    <li>Access your data anytime</li>
+                    <li>Export all your content</li>
+                    <li>Delete your account and data</li>
+                    <li>Opt out of analytics</li>
+                </ul>
+                
+                <h3>Third Parties</h3>
+                <p>We use Anthropic (Claude) and Google (Gemini) for AI features. AI queries are processed but not stored by these providers.</p>
+                
+                <p><em>Questions? Contact privacy@thewritersblock.llc</em></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Modal -->
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Contact Us</h2>
+                <button class="modal-close" onclick="closeModal('contactModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <h3>📧 Email</h3>
+                <p><a href="mailto:support@thewritersblock.llc">support@thewritersblock.llc</a></p>
+                
+                <h3>💬 Feedback</h3>
+                <p>We love hearing from our community! Share ideas, report bugs, or just say hi.</p>
+                
+                <h3>🐛 Bug Reports</h3>
+                <p>Found something broken? Email us with:</p>
+                <ul>
+                    <li>What you were trying to do</li>
+                    <li>What happened instead</li>
+                    <li>Your device/browser</li>
+                </ul>
+                
+                <h3>⏱️ Response Time</h3>
+                <p>We typically respond within 24-48 hours.</p>
+                
+                <button class="btn-primary" onclick="window.location.href='mailto:support@thewritersblock.llc'">Send Email</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FAQ Modal -->
+    <div class="modal" id="faqModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">FAQ</h2>
+                <button class="modal-close" onclick="closeModal('faqModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <h3>What is THE BLOCK?</h3>
+                <p>A creative writing app that helps you overcome writer's block with AI-powered tools, world building, character development, and more.</p>
+                
+                <h3>Is it free?</h3>
+                <p>Yes! Free tier includes 3 projects and 10 AI interactions per month. Pro is $4.20/month for unlimited everything.</p>
+                
+                <h3>Who owns my writing?</h3>
+                <p>You do! 100%. We never claim ownership of your creative work.</p>
+                
+                <h3>Is my data safe?</h3>
+                <p>Yes. Free tier stores locally on your device. Pro tier uses encrypted cloud backup.</p>
+                
+                <h3>What AI do you use?</h3>
+                <p>Anthropic's Claude for deep creative assistance and Google's Gemini for quick suggestions.</p>
+                
+                <h3>Can I use it offline?</h3>
+                <p>Yes! Writing works offline. AI features require internet.</p>
+                
+                <h3>How do I cancel Pro?</h3>
+                <p>Go to Settings → Account → Manage Subscription. Cancel anytime, no questions asked.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Upgrade Modal -->
+    <div class="modal" id="upgradeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">⭐ Upgrade to Pro</h2>
+                <button class="modal-close" onclick="closeModal('upgradeModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <h3>$4.20/month</h3>
+                <p>Unlock the full power of THE BLOCK:</p>
+                
+                <ul>
+                    <li>✨ <strong>Unlimited AI</strong> - No more 10/month limit</li>
+                    <li>📚 <strong>Unlimited Projects</strong> - Create as many as you want</li>
+                    <li>🌍 <strong>World Builder</strong> - Create rich story universes</li>
+                    <li>👥 <strong>Character Deck</strong> - Deep character development</li>
+                    <li>🧵 <strong>The Loom</strong> - Advanced plot tools</li>
+                    <li>☁️ <strong>Cloud Sync</strong> - Access from any device</li>
+                    <li>📄 <strong>Export</strong> - PDF, DOCX formats</li>
+                    <li>🎨 <strong>All Themes</strong> - Customize your experience</li>
+                </ul>
+                
+                <button class="btn-primary">Coming Soon!</button>
+                <p style="text-align: center; margin-top: 12px; font-size: 0.8rem; color: var(--text-muted);">Payment integration launching soon</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Profile</h2>
+                <button class="modal-close" onclick="closeModal('editProfileModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.85rem;">Name</label>
+                <input type="text" id="editName" style="width: 100%; padding: 12px; background: var(--bg-stardust); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 1rem; margin-bottom: 16px;">
+                
+                <label style="display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.85rem;">Email</label>
+                <input type="email" id="editEmail" style="width: 100%; padding: 12px; background: var(--bg-stardust); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-primary); font-size: 1rem; margin-bottom: 16px;">
+                
+                <button class="btn-primary" onclick="saveProfile()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete Account Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🗑️ Delete Account</h2>
+                <button class="modal-close" onclick="closeModal('deleteModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--lux-rose); font-weight: 500;">⚠️ This action cannot be undone!</p>
+                
+                <p>Deleting your account will permanently remove:</p>
+                <ul>
+                    <li>All your projects and drafts</li>
+                    <li>Your account information</li>
+                    <li>All saved preferences</li>
+                </ul>
+                
+                <p>Are you absolutely sure?</p>
+                
+                <button class="btn-danger" onclick="deleteAccount()">Yes, Delete My Account</button>
+                <button class="btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script>
+        // Load user data
+        async function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('theblock_current_user'));
+            
+            if (user) {
+                document.getElementById('userName').textContent = user.name || 'Writer';
+                document.getElementById('userEmail').textContent = user.email || '';
+                document.getElementById('userAvatar').textContent = (user.name || 'W').charAt(0).toUpperCase();
+                document.getElementById('userTier').textContent = (user.tier || 'free').toUpperCase() + ' TIER';
+                
+                // Populate edit form
+                document.getElementById('editName').value = user.name || '';
+                document.getElementById('editEmail').value = user.email || '';
+            }
+        }
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('open');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('open');
+        }
+        
+        // Close modal on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('open');
+                }
+            });
+        });
+        
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('zen-theme');
+            const isZen = document.body.classList.contains('zen-theme');
+            localStorage.setItem('theblock_theme', isZen ? 'zen' : 'midnight');
+            updateThemeUI();
+        }
+        
+        function updateThemeUI() {
+            const isZen = document.body.classList.contains('zen-theme');
+            document.getElementById('themeStatus').textContent = isZen ? 'Zen (Light)' : 'Midnight (Dark)';
+            document.getElementById('themeToggle').classList.toggle('active', isZen);
+        }
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theblock_theme');
+        if (savedTheme === 'zen') {
+            document.body.classList.add('zen-theme');
+        }
+        updateThemeUI();
+        
+        // Save profile
+        function saveProfile() {
+            const name = document.getElementById('editName').value;
+            const email = document.getElementById('editEmail').value;
+            
+            const user = JSON.parse(localStorage.getItem('theblock_current_user')) || {};
+            user.name = name;
+            user.email = email;
+            localStorage.setItem('theblock_current_user', JSON.stringify(user));
+            
+            // Update users list
+            const users = JSON.parse(localStorage.getItem('theblock_users') || '[]');
+            const userIndex = users.findIndex(u => u.id === user.id);
+            if (userIndex !== -1) {
+                users[userIndex] = { ...users[userIndex], name, email };
+                localStorage.setItem('theblock_users', JSON.stringify(users));
+            }
+            
+            loadUserData();
+            closeModal('editProfileModal');
+            alert('Profile updated!');
+        }
+        
+        // Sign out
+        function signOut() {
+            localStorage.removeItem('theblock_current_user');
+            window.location.href = 'auth.html';
+        }
+        
+        // Delete account
+        function deleteAccount() {
+            const user = JSON.parse(localStorage.getItem('theblock_current_user'));
+            
+            if (user) {
+                // Remove from users list
+                let users = JSON.parse(localStorage.getItem('theblock_users') || '[]');
+                users = users.filter(u => u.id !== user.id);
+                localStorage.setItem('theblock_users', JSON.stringify(users));
+                
+                // Clear all user data
+                localStorage.removeItem('theblock_current_user');
+                localStorage.removeItem('theblock_projects');
+                localStorage.removeItem('theblock_compost');
+                localStorage.removeItem('theblock_theme');
+                localStorage.removeItem('theblock_muse_credits');
+            }
+            
+            window.location.href = 'auth.html';
+        }
+        
+        // Initialize
+        loadUserData();
+    </script>
+</body>
+</html>
