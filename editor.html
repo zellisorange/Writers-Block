@@ -668,6 +668,25 @@
         .modal-btn-primary:hover {
             background: var(--lux-amber);
         }
+
+
+        .theme-toggle-btn {
+            padding: 8px 12px;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle-btn:hover {
+            background: var(--bg-glass-hover);
+            color: var(--lux-gold);
+        }
+
     </style>
 </head>
 <body>
@@ -706,7 +725,8 @@
                     </svg>
                     <span>Dashboard</span>
                 </a>
-                <button class="ai-muse-btn" id="aiMuseBtn" onclick="openMuseModal()">✨ Muse</button>
+               <button class="ai-muse-btn" id="aiMuseBtn" onclick="openMuseModal()">✨ Muse</button>
+                <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
                 <input 
                     type="text" 
                     class="project-title-input" 
@@ -797,6 +817,20 @@ The first draft is just you telling yourself the story."
         window.SupabaseAuth = window.LocalAuth;
         
         console.log('✦ Local Auth ready');
+           // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('zen-theme');
+            const isZen = document.body.classList.contains('zen-theme');
+            localStorage.setItem('theblock_theme', isZen ? 'zen' : 'midnight');
+            document.getElementById('themeToggle').textContent = isZen ? '🌙' : '🌿';
+        }
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theblock_theme');
+        if (savedTheme === 'zen') {
+            document.body.classList.add('zen-theme');
+            document.getElementById('themeToggle').textContent = '🌙';
+        }
     </script>
 
     
