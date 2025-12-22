@@ -21,11 +21,19 @@ const AuthDOM = {
 };
 
 // ============ INITIALIZATION ============
-document.addEventListener('DOMContentLoaded', () => {
+// Wait for Supabase to be ready
+window.addEventListener('supabase-ready', () => {
     console.log('✦ Auth system initializing...');
     checkExistingSession();
     bindAuthEvents();
 });
+
+// Fallback if already loaded
+if (window.SupabaseAuth) {
+    console.log('✦ Auth system initializing...');
+    checkExistingSession();
+    bindAuthEvents();
+}
 
 // ============ CHECK EXISTING SESSION ============
 async function checkExistingSession() {
