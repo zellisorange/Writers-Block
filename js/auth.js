@@ -22,18 +22,30 @@ const AuthDOM = {
 
 // ============ INITIALIZATION ============
 // Wait for Supabase to be ready
-window.addEventListener('supabase-ready', () => {
-    console.log('✦ Auth system initializing...');
-    checkExistingSession();
-    bindAuthEvents();
-});
-
-// Fallback if already loaded
-if (window.SupabaseAuth) {
+function initAuth() {
     console.log('✦ Auth system initializing...');
     checkExistingSession();
     bindAuthEvents();
 }
+
+// Listen for supabase-ready event
+window.addEventListener('supabase-ready', initAuth);
+
+// Also check on DOM load in case event already fired
+document.addEventListener('DOMContentLoaded', () => {
+    // Check every 100ms for up to 5 seconds
+    let attempts = 0;
+    const checkSupabase = setInterval(() => {
+        attempts++;
+        if (window.SupabaseAuth) {
+            clearInterval(checkSupabase);
+            initAuth();
+        } else if (attempts > 50) {
+            clearInterval(checkSupabase);
+            console.error('✦ Supabase failed to load');
+        }
+    }, 100);
+});
 
 // ============ CHECK EXISTING SESSION ============
 async function checkExistingSession() {
