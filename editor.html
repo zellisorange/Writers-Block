@@ -706,7 +706,87 @@
                     </svg>
                     <span>Dashboard</span>
                 </a>
-                <button class="ai-muse-btn" id="aiMuseBtn" onclick="openMuseModal()">✨ Muse</button>
+              /* Muse Tooltip */
+        .muse-tooltip {
+            position: absolute;
+            top: 60px;
+            left: 120px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 1px solid var(--lux-gold);
+            border-radius: 12px;
+            padding: 16px;
+            width: 280px;
+            box-shadow: 0 10px 40px rgba(245, 158, 11, 0.2);
+            z-index: 1000;
+            animation: tooltipBounce 0.5s ease;
+            display: none;
+        }
+        
+        .muse-tooltip.show {
+            display: block;
+        }
+        
+        @keyframes tooltipBounce {
+            0% { opacity: 0; transform: translateY(-10px); }
+            50% { transform: translateY(5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tooltip-arrow {
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid var(--lux-gold);
+        }
+        
+        .tooltip-content strong {
+            color: var(--lux-gold);
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .tooltip-content p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        
+        .tooltip-hint {
+            color: var(--lux-amber) !important;
+            font-style: italic;
+        }
+        
+        .tooltip-close {
+            width: 100%;
+            padding: 10px;
+            background: var(--lux-gold);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0b;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+        
+        .tooltip-close:hover {
+            background: var(--lux-amber);
+            transform: scale(1.02);
+        }
+        
+        @media (max-width: 768px) {
+            .muse-tooltip {
+                left: 10px;
+                right: 10px;
+                width: auto;
+            }
+        }
                 <input 
                     type="text" 
                     class="project-title-input" 
@@ -797,6 +877,29 @@ The first draft is just you telling yourself the story."
         window.SupabaseAuth = window.LocalAuth;
         
         console.log('✦ Local Auth ready');
+         // Show Muse tooltip for new users
+        function showMuseTooltip() {
+            const hasSeenTooltip = localStorage.getItem('theblock_muse_tooltip_seen');
+            if (!hasSeenTooltip) {
+                setTimeout(() => {
+                    const tooltip = document.getElementById('museTooltip');
+                    if (tooltip) {
+                        tooltip.classList.add('show');
+                    }
+                }, 1000);
+            }
+        }
+        
+        function dismissMuseTooltip() {
+            const tooltip = document.getElementById('museTooltip');
+            if (tooltip) {
+                tooltip.classList.remove('show');
+            }
+            localStorage.setItem('theblock_muse_tooltip_seen', 'true');
+        }
+        
+        // Show tooltip on page load
+        showMuseTooltip();
     </script>
 
     
