@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050506">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>THE BLOCK | The Grimoire</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #050506;
+            --bg-cosmos: #0a0a0b;
+            --bg-nebula: #0f0f12;
+            --bg-stardust: #161619;
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.06);
+            --lux-gold: #f59e0b;
+            --lux-amber: #fbbf24;
+            --lux-violet: #8b5cf6;
+            --lux-cyan: #06b6d4;
+            --text-bright: #ffffff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+        
+        body.zen-theme {
+            --bg-void: #f5f1eb;
+            --bg-cosmos: #ebe6dc;
+            --bg-nebula: #e0d9cc;
+            --bg-stardust: #d4cdbf;
+            --bg-glass: rgba(0, 0, 0, 0.03);
+            --bg-glass-hover: rgba(0, 0, 0, 0.06);
+            --lux-gold: #5d7a5d;
+            --lux-amber: #7a956e;
+            --lux-violet: #6b5b7a;
+            --lux-cyan: #4a7a7a;
+            --text-bright: #2c2c2c;
+            --text-primary: #3d3d3d;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            --glass-border: rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-cosmos);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-back:hover {
+            background: var(--bg-glass);
+            color: var(--lux-gold);
+        }
+        
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .header-spacer {
+            width: 80px;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Intro */
+        .intro-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .intro-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        
+        .intro-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--lux-violet);
+            margin-bottom: 8px;
+        }
+        
+        .intro-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Search Box */
+        .search-box {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--lux-violet);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+        
+        /* Mode Toggle */
+        .mode-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .mode-btn.active {
+            background: var(--lux-violet);
+            border-color: var(--lux-violet);
+            color: white;
+        }
+        
+        .mode-btn:hover:not(.active) {
+            background: var(--bg-glass-hover);
+            border-color: var(--lux-violet);
+        }
+        
+        /* Results */
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .result-card {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .result-word {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-bright);
+            margin-bottom: 4px;
+        }
+        
+        .result-phonetic {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+        
+        .result-section {
+            margin-bottom: 16px;
+        }
+        
+        .result-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--lux-violet);
+            margin-bottom: 8px;
+        }
+        
+        .definition {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            padding-left: 12px;
+            border-left: 2px solid var(--glass-border);
+        }
+        
+        .example {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+        
+        /* Synonyms */
+        .synonyms-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .synonym-chip {
+            padding: 6px 12px;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .synonym-chip:hover {
+            background: var(--lux-violet);
+            border-color: var(--lux-violet);
+            color: white;
+        }
+        
+        /* Psychedelic Mode */
+        .psychedelic-chip {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2));
+            border-color: var(--lux-violet);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 8px;
+        }
+        
+        .empty-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--lux-violet);
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--glass-border);
+            border-top-color: var(--lux-violet);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Recent Searches */
+        .recent-section {
+            margin-top: 32px;
+        }
+        
+        .recent-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        
+        .recent-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .recent-item {
+            padding: 8px 14px;
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .recent-item:hover {
+            background: var(--bg-glass-hover);
+            color: var(--lux-gold);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="btn-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+        </a>
+        <h1 class="header-title">📖 The Grimoire</h1>
+        <div class="header-spacer"></div>
+    </header>
+    
+    <!-- Container -->
+    <div class="container">
+        
+        <!-- Intro -->
+        <div class="intro-card">
+            <div class="intro-icon">📖</div>
+            <div class="intro-title">Your Magical Dictionary</div>
+            <div class="intro-desc">
+                Find the perfect word. Discover synonyms, definitions, and unexpected alternatives with Psychedelic Synonym mode!
+            </div>
+        </div>
+        
+        <!-- Search -->
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input 
+                type="text" 
+                class="search-input" 
+                id="searchInput" 
+                placeholder="Search for a word..."
+                autocomplete="off"
+            >
+        </div>
+        
+        <!-- Mode Toggle -->
+        <div class="mode-toggle">
+            <button class="mode-btn active" id="normalMode" onclick="setMode('normal')">📚 Normal</button>
+            <button class="mode-btn" id="psychedelicMode" onclick="setMode('psychedelic')">🌈 Psychedelic</button>
+        </div>
+        
+        <!-- Results -->
+        <div class="results" id="results">
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">✨</div>
+                <div class="empty-title">Ready to Explore</div>
+                <div class="empty-desc">Type a word to discover its meanings and synonyms</div>
+            </div>
+        </div>
+        
+        <!-- Recent Searches -->
+        <div class="recent-section" id="recentSection">
+            <div class="recent-title">Recent Searches</div>
+            <div class="recent-list" id="recentList"></div>
+        </div>
+    </div>
+    
+    <script>
+        let currentMode = 'normal';
+        let searchTimeout = null;
+        
+        // Set mode
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('normalMode').classList.toggle('active', mode === 'normal');
+            document.getElementById('psychedelicMode').classList.toggle('active', mode === 'psychedelic');
+            
+            // Re-search if there's a word
+            const word = document.getElementById('searchInput').value.trim();
+            if (word) searchWord(word);
+        }
+        
+        // Search input handler
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const word = e.target.value.trim();
+            
+            if (!word) {
+                showEmptyState();
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => searchWord(word), 500);
+        });
+        
+        // Enter key
+        document.getElementById('searchInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                clearTimeout(searchTimeout);
+                const word = e.target.value.trim();
+                if (word) searchWord(word);
+            }
+        });
+        
+        // Search word
+        async function searchWord(word) {
+            const results = document.getElementById('results');
+            
+            // Show loading
+            results.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <div>Searching the grimoire...</div>
+                </div>
+            `;
+            
+            try {
+                // Use Free Dictionary API
+                const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+                
+                if (!response.ok) {
+                    throw new Error('Word not found');
+                }
+                
+                const data = await response.json();
+                displayResults(data[0]);
+                saveRecentSearch(word);
+                
+            } catch (error) {
+                // If dictionary fails, use AI
+                await searchWithAI(word);
+            }
+        }
+        
+        // Display results
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            
+            let html = `
+                <div class="result-card">
+                    <div class="result-word">${data.word}</div>
+                    ${data.phonetic ? `<div class="result-phonetic">${data.phonetic}</div>` : ''}
+            `;
+            
+            // Meanings
+            data.meanings?.forEach(meaning => {
+                html += `
+                    <div class="result-section">
+                        <div class="section-title">${meaning.partOfSpeech}</div>
+                `;
+                
+                meaning.definitions?.slice(0, 3).forEach(def => {
+                    html += `
+                        <div class="definition">
+                            ${def.definition}
+                            ${def.example ? `<div class="example">"${def.example}"</div>` : ''}
+                        </div>
+                    `;
+                });
+                
+                // Synonyms
+                if (meaning.synonyms?.length > 0) {
+                    html += `
+                        <div class="section-title" style="margin-top: 12px;">Synonyms</div>
+                        <div class="synonyms-grid">
+                    `;
+                    
+                    meaning.synonyms.slice(0, 10).forEach(syn => {
+                        const chipClass = currentMode === 'psychedelic' ? 'synonym-chip psychedelic-chip' : 'synonym-chip';
+                        html += `<span class="${chipClass}" onclick="searchFromChip('${syn}')">${syn}</span>`;
+                    });
+                    
+                    html += `</div>`;
+                }
+                
+                html += `</div>`;
+            });
+            
+            html += `</div>`;
+            
+            // Psychedelic mode - add AI suggestions
+            if (currentMode === 'psychedelic') {
+                html += `
+                    <div class="result-card" style="border-color: var(--lux-violet);">
+                        <div class="section-title">🌈 Psychedelic Alternatives</div>
+                        <div class="synonyms-grid" id="psychedelicSuggestions">
+                            <span class="synonym-chip psychedelic-chip">Loading magic...</span>
+                        </div>
+                    </div>
+                `;
+                
+                // Get AI suggestions
+                getPsychedelicSuggestions(data.word);
+            }
+            
+            results.innerHTML = html;
+        }
+        
+        // Search with AI fallback
+        async function searchWithAI(word) {
+            const results = document.getElementById('results');
+            
+            try {
+                const response = await fetch('/.netlify/functions/muse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: `Define the word "${word}" briefly. Include: 1) A short definition, 2) Part of speech, 3) 5 synonyms. Keep it concise.`,
+                        type: 'unstuck',
+                        model: 'gemini'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                results.innerHTML = `
+                    <div class="result-card">
+                        <div class="result-word">${word}</div>
+                        <div class="result-section">
+                            <div class="section-title">AI Definition</div>
+                            <div class="definition">${data.response || 'No definition found.'}</div>
+                        </div>
+                    </div>
+                `;
+                
+                saveRecentSearch(word);
+                
+            } catch (error) {
+                results.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🤔</div>
+                        <div class="empty-title">Word Not Found</div>
+                        <div class="empty-desc">Try a different spelling or another word</div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Psychedelic suggestions
+        async function getPsychedelicSuggestions(word) {
+            try {
+                const response = await fetch('/.netlify/functions/muse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: `Give me 8 unexpected, creative, or unusual synonyms/alternatives for "${word}". Think poetic, archaic, slang, or metaphorical. Just list the words separated by commas, nothing else.`,
+                        type: 'unstuck',
+                        model: 'gemini'
+                    })
+                });
+                
+                const data = await response.json();
+                const suggestions = data.response?.split(',').map(s => s.trim()).filter(s => s) || [];
+                
+                const container = document.getElementById('psychedelicSuggestions');
+                if (container && suggestions.length > 0) {
+                    container.innerHTML = suggestions.map(s => 
+                        `<span class="synonym-chip psychedelic-chip" onclick="searchFromChip('${s}')">${s}</span>`
+                    ).join('');
+                }
+                
+            } catch (error) {
+                console.log('Psychedelic suggestions failed');
+            }
+        }
+        
+        // Search from chip click
+        function searchFromChip(word) {
+            document.getElementById('searchInput').value = word;
+            searchWord(word);
+        }
+        
+        // Show empty state
+        function showEmptyState() {
+            document.getElementById('results').innerHTML = `
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">✨</div>
+                    <div class="empty-title">Ready to Explore</div>
+                    <div class="empty-desc">Type a word to discover its meanings and synonyms</div>
+                </div>
+            `;
+        }
+        
+        // Recent searches
+        function saveRecentSearch(word) {
+            let recent = JSON.parse(localStorage.getItem('theblock_grimoire_recent') || '[]');
+            recent = recent.filter(w => w.toLowerCase() !== word.toLowerCase());
+            recent.unshift(word);
+            recent = recent.slice(0, 10);
+            localStorage.setItem('theblock_grimoire_recent', JSON.stringify(recent));
+            loadRecentSearches();
+        }
+        
+        function loadRecentSearches() {
+            const recent = JSON.parse(localStorage.getItem('theblock_grimoire_recent') || '[]');
+            const container = document.getElementById('recentList');
+            const section = document.getElementById('recentSection');
+            
+            if (recent.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+            
+            section.style.display = 'block';
+            container.innerHTML = recent.map(word => 
+                `<span class="recent-item" onclick="searchFromChip('${word}')">${word}</span>`
+            ).join('');
+        }
+        
+        // Load theme
+        const savedTheme = localStorage.getItem('theblock_theme');
+        if (savedTheme === 'zen') {
+            document.body.classList.add('zen-theme');
+        }
+        
+        // Initialize
+        loadRecentSearches();
+        document.getElementById('searchInput').focus();
+    </script>
+</body>
+</html>
