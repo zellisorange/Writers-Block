@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050506">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>THE BLOCK | Compost Bin</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #050506;
+            --bg-cosmos: #0a0a0b;
+            --bg-nebula: #0f0f12;
+            --bg-stardust: #161619;
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.06);
+            --lux-gold: #f59e0b;
+            --lux-amber: #fbbf24;
+            --lux-rose: #f43f5e;
+            --lux-violet: #8b5cf6;
+            --lux-emerald: #10b981;
+            --text-bright: #ffffff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+        
+        body.zen-theme {
+            --bg-void: #f5f1eb;
+            --bg-cosmos: #ebe6dc;
+            --bg-nebula: #e0d9cc;
+            --bg-stardust: #d4cdbf;
+            --bg-glass: rgba(0, 0, 0, 0.03);
+            --bg-glass-hover: rgba(0, 0, 0, 0.06);
+            --lux-gold: #5d7a5d;
+            --lux-amber: #7a956e;
+            --lux-emerald: #5d7a5d;
+            --text-bright: #2c2c2c;
+            --text-primary: #3d3d3d;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            --glass-border: rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-cosmos);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-back:hover {
+            background: var(--bg-glass);
+            color: var(--lux-gold);
+        }
+        
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .header-spacer {
+            width: 80px;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Intro Card */
+        .intro-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .intro-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        
+        .intro-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--lux-emerald);
+            margin-bottom: 8px;
+        }
+        
+        .intro-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--lux-gold);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        /* Compost List */
+        .compost-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .compost-item {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .compost-item:hover {
+            background: var(--bg-stardust);
+            border-color: var(--lux-emerald);
+        }
+        
+        .compost-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .compost-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .compost-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .compost-preview {
+            font-family: 'Merriweather', serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .compost-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .meta-item {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .compost-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .btn-action {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-restore {
+            background: var(--lux-emerald);
+            color: white;
+        }
+        
+        .btn-restore:hover {
+            background: #0d9668;
+        }
+        
+        .btn-inspire {
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+        
+        .btn-inspire:hover {
+            border-color: var(--lux-gold);
+            color: var(--lux-gold);
+        }
+        
+        .btn-delete {
+            background: transparent;
+            border: 1px solid var(--lux-rose);
+            color: var(--lux-rose);
+            padding: 10px 12px;
+            flex: 0;
+        }
+        
+        .btn-delete:hover {
+            background: rgba(244, 63, 94, 0.1);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 8px;
+        }
+        
+        .empty-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            font-family: 'Merriweather', serif;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .modal-actions .btn-action {
+            flex: 1;
+        }
+        
+        /* Inspiration Modal */
+        .inspiration-text {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid var(--lux-gold);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Merriweather', serif;
+            font-style: italic;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+        
+        .inspiration-label {
+            font-size: 0.8rem;
+            color: var(--lux-gold);
+            margin-bottom: 12px;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="btn-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+        </a>
+        <h1 class="header-title">🌱 Compost Bin</h1>
+        <div class="header-spacer"></div>
+    </header>
+    
+    <!-- Container -->
+    <div class="container">
+        
+        <!-- Intro Card -->
+        <div class="intro-card">
+            <div class="intro-icon">🌱</div>
+            <div class="intro-title">Nothing Is Wasted</div>
+            <div class="intro-desc">
+                Deleted drafts become nutrients for future ideas. Every fragment holds potential—mine your compost for creative sparks!
+            </div>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="compostCount">0</div>
+                <div class="stat-label">Fragments</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalWords">0</div>
+                <div class="stat-label">Words Saved</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="restored">0</div>
+                <div class="stat-label">Restored</div>
+            </div>
+        </div>
+        
+        <!-- Compost List -->
+        <div class="compost-list" id="compostList">
+            <!-- Items will be inserted here -->
+        </div>
+        
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">🌿</div>
+            <div class="empty-title">Your Compost is Empty</div>
+            <div class="empty-desc">When you delete drafts, they'll appear here—ready to inspire your next creation.</div>
+        </div>
+    </div>
+    
+    <!-- View Modal -->
+    <div class="modal" id="viewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="viewTitle">Fragment</h2>
+                <button class="modal-close" onclick="closeModal('viewModal')">×</button>
+            </div>
+            <div class="modal-body" id="viewContent"></div>
+            <div class="modal-actions">
+                <button class="btn-action btn-restore" onclick="restoreFromModal()">🌱 Restore</button>
+                <button class="btn-action btn-inspire" onclick="getInspiration()">✨ Get Inspiration</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Inspiration Modal -->
+    <div class="modal" id="inspireModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">✨ Creative Spark</h2>
+                <button class="modal-close" onclick="closeModal('inspireModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="inspiration-label">Based on your fragment, here's an idea...</div>
+                <div class="inspiration-text" id="inspirationText">Loading inspiration...</div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-action btn-inspire" onclick="closeModal('inspireModal')">Thanks!</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentFragment = null;
+        
+        // Load compost
+        function loadCompost() {
+            const compost = JSON.parse(localStorage.getItem('theblock_compost') || '[]');
+            const stats = JSON.parse(localStorage.getItem('theblock_compost_stats') || '{"restored": 0}');
+            
+            // Update stats
+            document.getElementById('compostCount').textContent = compost.length;
+            document.getElementById('totalWords').textContent = compost.reduce((sum, item) => sum + (item.wordCount || 0), 0);
+            document.getElementById('restored').textContent = stats.restored || 0;
+            
+            const list = document.getElementById('compostList');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (compost.length === 0) {
+                list.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            list.style.display = 'flex';
+            emptyState.style.display = 'none';
+            
+            list.innerHTML = compost.map((item, index) => `
+                <div class="compost-item" onclick="viewFragment(${index})">
+                    <div class="compost-header">
+                        <div class="compost-title">${item.title || 'Untitled Fragment'}</div>
+                        <div class="compost-date">${formatDate(item.deletedAt)}</div>
+                    </div>
+                    <div class="compost-preview">${item.content || 'No content...'}</div>
+                    <div class="compost-meta">
+                        <span class="meta-item">📝 ${item.wordCount || 0} words</span>
+                        <span class="meta-item">📅 ${item.originalDate ? 'Created ' + formatDate(item.originalDate) : ''}</span>
+                    </div>
+                    <div class="compost-actions" onclick="event.stopPropagation()">
+                        <button class="btn-action btn-restore" onclick="restoreFragment(${index})">🌱 Restore</button>
+                        <button class="btn-action btn-inspire" onclick="inspireFromFragment(${index})">✨ Inspire</button>
+                        <button class="btn-action btn-delete" onclick="permanentDelete(${index})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Format date
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 86400000) return 'Today';
+            if (diff < 172800000) return 'Yesterday';
+            if (diff < 604800000) return Math.floor(diff / 86400000) + ' days ago';
+            
+            return date.toLocaleDateString();
+        }
+        
+        // View fragment
+        function viewFragment(index) {
+            const compost = JSON.parse(localStorage.getItem('theblock_compost') || '[]');
+            currentFragment = { index, data: compost[index] };
+            
+            document.getElementById('viewTitle').textContent = compost[index].title || 'Untitled Fragment';
+            document.getElementById('viewContent').textContent = compost[index].content || 'No content...';
+            document.getElementById('viewModal').classList.add('open');
+        }
+        
+        // Restore fragment
+        function restoreFragment(index) {
+            const compost = JSON.parse(localStorage.getItem('theblock_compost') || '[]');
+            const fragment = compost[index];
+            
+            // Create new project from fragment
+            const projects = JSON.parse(localStorage.getItem('theblock_projects') || '[]');
+            const newProject = {
+                id: 'project_' + Date.now(),
+                title: fragment.title + ' (Restored)',
+                chapters: [{
+                    id: 'chapter_1',
+                    title: 'Chapter 1',
+                    content: fragment.content
+                }],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            projects.push(newProject);
+            localStorage.setItem('theblock_projects', JSON.stringify(projects));
+            
+            // Remove from compost
+            compost.splice(index, 1);
+            localStorage.setItem('theblock_compost', JSON.stringify(compost));
+            
+            // Update stats
+            const stats = JSON.parse(localStorage.getItem('theblock_compost_stats') || '{"restored": 0}');
+            stats.restored = (stats.restored || 0) + 1;
+            localStorage.setItem('theblock_compost_stats', JSON.stringify(stats));
+            
+            // Reload
+            loadCompost();
+            closeModal('viewModal');
+            alert('✅ Fragment restored as new project!');
+        }
+        
+        function restoreFromModal() {
+            if (currentFragment) {
+                restoreFragment(currentFragment.index);
+            }
+        }
+        
+        // Get inspiration from fragment
+        async function inspireFromFragment(index) {
+            const compost = JSON.parse(localStorage.getItem('theblock_compost') || '[]');
+            currentFragment = { index, data: compost[index] };
+            getInspiration();
+        }
+        
+        async function getInspiration() {
+            if (!currentFragment) return;
+            
+            document.getElementById('inspirationText').textContent = '✨ The Muse is contemplating...';
+            document.getElementById('inspireModal').classList.add('open');
+            
+            try {
+                const response = await fetch('/.netlify/functions/muse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: `Here's a fragment from my deleted drafts: "${currentFragment.data.content?.substring(0, 500) || 'Untitled fragment'}". Give me a fresh creative direction or "what if" scenario to transform this into something new. Be brief but inspiring.`,
+                        type: 'idea',
+                        model: 'claude'
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById('inspirationText').textContent = data.response || 'Every fragment holds a seed. What if you approached this from a completely different perspective? Try changing the setting, the time period, or the narrator.';
+            } catch (error) {
+                document.getElementById('inspirationText').textContent = 'Every fragment holds a seed. What if you approached this from a completely different perspective? Try changing the setting, the time period, or the narrator—sometimes the best ideas come from composted thoughts! 🌱';
+            }
+        }
+        
+        // Permanent delete
+        function permanentDelete(index) {
+            if (!confirm('Permanently delete this fragment? This cannot be undone.')) return;
+            
+            const compost = JSON.parse(localStorage.getItem('theblock_compost') || '[]');
+            compost.splice(index, 1);
+            localStorage.setItem('theblock_compost', JSON.stringify(compost));
+            
+            loadCompost();
+        }
+        
+        // Modal functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('open');
+        }
+        
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('open');
+                }
+            });
+        });
+        
+        // Load theme
+        const savedTheme = localStorage.getItem('theblock_theme');
+        if (savedTheme === 'zen') {
+            document.body.classList.add('zen-theme');
+        }
+        
+        // Initialize
+        loadCompost();
+    </script>
+</body>
+</html>
