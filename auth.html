@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="css/auth.css">
     
     <title>THE BLOCK | Sign In</title>
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="auth-body">
     
@@ -106,7 +108,19 @@
                     <span>or</span>
                 </div>
                 
-                <button id="google-signin" class="btn-social">
+                <div id="g_id_onload"
+                    data-client_id="595170840540-qrgao88pi9qtj8h7am68h9mlol38p673.apps.googleusercontent.com"
+                    data-callback="handleGoogleSignIn"
+                    data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                    data-type="standard"
+                    data-size="large"
+                    data-theme="filled_black"
+                    data-text="continue_with"
+                    data-shape="rectangular"
+                    data-width="100%">
+                </div>
                     <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -172,7 +186,14 @@
                     <span>or</span>
                 </div>
                 
-                <button id="google-signup" class="btn-social">
+             <div class="g_id_signin"
+                    data-type="standard"
+                    data-size="large"
+                    data-theme="filled_black"
+                    data-text="signup_with"
+                    data-shape="rectangular"
+                    data-width="100%">
+                </div>
                     <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -283,6 +304,35 @@
         window.SupabaseAuth = window.LocalAuth;
         
         console.log('✦ Local Auth ready');
+
+        // Google Sign-In
+        window.handleGoogleSignIn = async (response) => {
+            // Decode the JWT token from Google
+            const payload = JSON.parse(atob(response.credential.split('.')[1]));
+            
+            const user = {
+                id: 'google_' + payload.sub,
+                email: payload.email,
+                name: payload.name,
+                picture: payload.picture,
+                tier: 'free',
+                provider: 'google',
+                createdAt: new Date().toISOString()
+            };
+            
+            // Save to users list
+            const users = JSON.parse(localStorage.getItem('theblock_users') || '[]');
+            if (!users.find(u => u.email === user.email)) {
+                users.push(user);
+                localStorage.setItem('theblock_users', JSON.stringify(users));
+            }
+            
+            // Set current user
+            localStorage.setItem('theblock_current_user', JSON.stringify(user));
+            
+            // Redirect to dashboard
+            window.location.href = 'index.html';
+        };
     </script>
     
     <!-- Auth Script -->
