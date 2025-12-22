@@ -883,6 +883,7 @@
                         <div class="tool-icon">📚</div>
                         <span class="tool-label">The Shelf</span>
                         <span class="tool-badge" id="projectCount">0</span>
+                        <span class="info-btn" onclick="event.stopPropagation(); showFeatureInfo('shelf')">ⓘ</span>
                     </div>
                     
                     <div class="shelf-projects" id="shelfProjects">
@@ -893,37 +894,41 @@
                         </div>
                     </div>
                     
-                    <div class="tool-item" id="vialBtn">
-                        <div class="tool-icon">🔮</div>
+                    <div class="tool-item" onclick="showFeatureInfo('vial')">
+                        <span class="tool-icon">🔮</span>
                         <span class="tool-label">The Vial</span>
+                        <span class="info-btn" onclick="event.stopPropagation(); showFeatureInfo('vial')">ⓘ</span>
                     </div>
                     
-                    <div class="tool-item" id="loomBtn">
-                        <div class="tool-icon">🧵</div>
+                    <div class="tool-item" onclick="showFeatureInfo('loom')">
+                        <span class="tool-icon">🧵</span>
                         <span class="tool-label">The Loom</span>
+                        <span class="info-btn" onclick="event.stopPropagation(); showFeatureInfo('loom')">ⓘ</span>
                     </div>
                     
-                    <div class="tool-item" id="characterBtn">
-                        <div class="tool-icon">👥</div>
+                    <div class="tool-item" onclick="showFeatureInfo('character')">
+                        <span class="tool-icon">👥</span>
                         <span class="tool-label">Character Deck</span>
+                        <span class="info-btn" onclick="event.stopPropagation(); showFeatureInfo('character')">ⓘ</span>
                     </div>
                 </div>
                 
-                <!-- Gardener Tools -->
+                <!-- Gardener -->
                 <div class="tool-section">
                     <div class="tool-section-title">Gardener</div>
                     
-                    <div class="tool-item" id="compostBtn">
-                        <div class="tool-icon">🌱</div>
+                    <div class="tool-item" onclick="showFeatureInfo('compost')">
+                        <span class="tool-icon">🌱</span>
                         <span class="tool-label">Compost Bin</span>
+                        <span class="info-btn" onclick="event.stopPropagation(); showFeatureInfo('compost')">ⓘ</span>
                     </div>
                     
-                    <div class="tool-item" id="grimoireBtn">
-                        <div class="tool-icon">📖</div>
+                    <div class="tool-item" onclick="showFeatureInfo('grimoire')">
+                        <span class="tool-icon">📖</span>
                         <span class="tool-label">The Grimoire</span>
+                        <span class="info-btn" onclick="event.stopPropagation(); showFeatureInfo('grimoire')">ⓘ</span>
                     </div>
                 </div>
-                
                 <!-- Settings -->
                 <div class="tool-section">
                     <div class="tool-section-title">System</div>
