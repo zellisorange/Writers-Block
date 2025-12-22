@@ -217,50 +217,72 @@
         
     </div>
     
-<!-- Supabase Library (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Initialize Supabase -->
+<!-- Local Auth System -->
     <script>
-        const SUPABASE_URL = 'https://wwzhafvlqejccrskvwhb.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3emhhZnZscWVqY2Nyc2t2d2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyOTk0MzgsImV4cCI6MjA4MTg3NTQzOH0.ajBE95GUoGNHmWiJ7WMFj0StVRrLd6Rp58I0sEh55pQ';
-        
-        // Create client using the global 'supabase' object from CDN
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        // Make auth functions available globally
-        window.SupabaseAuth = {
+        window.LocalAuth = {
             signUp: async (email, password, name) => {
-                const { data, error } = await _supabase.auth.signUp({
-                    email, password,
-                    options: { data: { name, tier: 'free' } }
-                });
-                if (error) throw error;
-                return data;
+                const users = JSON.parse(localStorage.getItem('theblock_users') || '[]');
+                
+                // Check if user exists
+                if (users.find(u => u.email === email)) {
+                    throw new Error('Email already registered');
+                }
+                
+                // Create user
+                const user = {
+                    id: 'user_' + Date.now(),
+                    email,
+                    name,
+                    tier: 'free',
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Save user (in real app, hash password!)
+                users.push({ ...user, password });
+                localStorage.setItem('theblock_users', JSON.stringify(users));
+                
+                // Auto login
+                localStorage.setItem('theblock_current_user', JSON.stringify(user));
+                
+                return { user };
             },
+            
             signIn: async (email, password) => {
-                const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-                if (error) throw error;
-                return data;
+                const users = JSON.parse(localStorage.getItem('theblock_users') || '[]');
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (!user) {
+                    throw new Error('Invalid email or password');
+                }
+                
+                // Remove password from session
+                const { password: _, ...safeUser } = user;
+                localStorage.setItem('theblock_current_user', JSON.stringify(safeUser));
+                
+                return { user: safeUser };
             },
+            
             signOut: async () => {
-                const { error } = await _supabase.auth.signOut();
-                if (error) throw error;
+                localStorage.removeItem('theblock_current_user');
                 return true;
             },
+            
             getUser: async () => {
-                const { data: { user } } = await _supabase.auth.getUser();
-                return user;
+                const user = localStorage.getItem('theblock_current_user');
+                return user ? JSON.parse(user) : null;
             },
+            
             resetPassword: async (email) => {
-                const { data, error } = await _supabase.auth.resetPasswordForEmail(email);
-                if (error) throw error;
-                return data;
-            },
-            client: _supabase
+                // In localStorage version, just show message
+                alert('Password reset is not available in offline mode. Please create a new account.');
+                return true;
+            }
         };
         
-        console.log('✦ Supabase ready');
+        // Make it available as SupabaseAuth for compatibility
+        window.SupabaseAuth = window.LocalAuth;
+        
+        console.log('✦ Local Auth ready');
     </script>
     
     <!-- Auth Script -->

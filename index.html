@@ -977,30 +977,24 @@
         
     </div>
     
- <!-- Supabase Library (CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Initialize Supabase -->
+<!-- Local Auth System -->
     <script>
-        const SUPABASE_URL = 'https://wwzhafvlqejccrskvwhb.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3emhhZnZscWVqY2Nyc2t2d2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyOTk0MzgsImV4cCI6MjA4MTg3NTQzOH0.ajBE95GUoGNHmWiJ7WMFj0StVRrLd6Rp58I0sEh55pQ';
-        
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        window.SupabaseAuth = {
+        window.LocalAuth = {
             signOut: async () => {
-                const { error } = await _supabase.auth.signOut();
-                if (error) throw error;
+                localStorage.removeItem('theblock_current_user');
                 return true;
             },
+            
             getUser: async () => {
-                const { data: { user } } = await _supabase.auth.getUser();
-                return user;
-            },
-            client: _supabase
+                const user = localStorage.getItem('theblock_current_user');
+                return user ? JSON.parse(user) : null;
+            }
         };
         
-        console.log('✦ Supabase ready');
+        // Make it available as SupabaseAuth for compatibility
+        window.SupabaseAuth = window.LocalAuth;
+        
+        console.log('✦ Local Auth ready');
     </script>
     
 <!-- App Script -->
