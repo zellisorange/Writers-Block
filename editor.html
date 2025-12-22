@@ -1073,8 +1073,10 @@ The first draft is just you telling yourself the story."
                 }
             });
             
-// AI Muse button
-            document.getElementById('aiMuseBtn').onclick = openMuseModal;
+     // AI Muse button - bind after page loads
+            setTimeout(() => {
+                document.getElementById('aiMuseBtn').onclick = openMuseModal;
+            }, 100);
             
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
