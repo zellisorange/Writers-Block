@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050506">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>THE BLOCK | The Vial</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #050506;
+            --bg-cosmos: #0a0a0b;
+            --bg-nebula: #0f0f12;
+            --bg-stardust: #161619;
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.06);
+            --lux-gold: #f59e0b;
+            --lux-amber: #fbbf24;
+            --lux-violet: #8b5cf6;
+            --lux-rose: #f43f5e;
+            --lux-cyan: #06b6d4;
+            --text-bright: #ffffff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+        
+        body.zen-theme {
+            --bg-void: #f5f1eb;
+            --bg-cosmos: #ebe6dc;
+            --bg-nebula: #e0d9cc;
+            --bg-stardust: #d4cdbf;
+            --bg-glass: rgba(0, 0, 0, 0.03);
+            --bg-glass-hover: rgba(0, 0, 0, 0.06);
+            --lux-gold: #5d7a5d;
+            --lux-violet: #6b5b7a;
+            --text-bright: #2c2c2c;
+            --text-primary: #3d3d3d;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            --glass-border: rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-cosmos);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-back:hover {
+            background: var(--bg-glass);
+            color: var(--lux-gold);
+        }
+        
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .header-spacer {
+            width: 80px;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Intro */
+        .intro-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .intro-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        
+        .intro-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--lux-violet);
+            margin-bottom: 8px;
+        }
+        
+        .intro-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Sections */
+        .section {
+            margin-bottom: 24px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+        
+        .section-action {
+            font-size: 0.8rem;
+            color: var(--lux-violet);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .section-action:hover {
+            color: var(--lux-gold);
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        
+        /* Tags */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag {
+            padding: 6px 12px;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tag:hover {
+            border-color: var(--lux-violet);
+            color: var(--lux-violet);
+        }
+        
+        .tag.selected {
+            background: var(--lux-violet);
+            border-color: var(--lux-violet);
+            color: white;
+        }
+        
+        .tag.add-tag {
+            border-style: dashed;
+            color: var(--text-muted);
+        }
+        
+        .tag.add-tag:hover {
+            border-color: var(--lux-gold);
+            color: var(--lux-gold);
+        }
+        
+        /* Textarea */
+        .vial-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            background: var(--bg-stardust);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: 'Merriweather', serif;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        
+        .vial-textarea:focus {
+            outline: none;
+            border-color: var(--lux-violet);
+        }
+        
+        .vial-textarea::placeholder {
+            color: var(--text-muted);
+        }
+        
+        /* Sliders */
+        .slider-container {
+            margin-bottom: 16px;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .slider-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .slider-value {
+            font-size: 0.85rem;
+            color: var(--lux-violet);
+            font-weight: 500;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-stardust);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--lux-violet);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+        
+        /* Save Button */
+        .save-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--lux-violet), var(--lux-gold));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 24px;
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .save-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* DNA Preview */
+        .dna-preview {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--lux-violet);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+        
+        .dna-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--lux-violet);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dna-text {
+            font-family: 'Merriweather', serif;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-style: italic;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 16px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-stardust);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--lux-violet);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .modal-btn.primary {
+            background: var(--lux-violet);
+            border: none;
+            color: white;
+        }
+        
+        .modal-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="btn-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+        </a>
+        <h1 class="header-title">🔮 The Vial</h1>
+        <div class="header-spacer"></div>
+    </header>
+    
+    <!-- Container -->
+    <div class="container">
+        
+        <!-- Intro -->
+        <div class="intro-card">
+            <div class="intro-icon">🔮</div>
+            <div class="intro-title">Your Creative DNA</div>
+            <div class="intro-desc">
+                Teach The Muse who you are. Your themes, style, and preferences shape how AI helps you write authentically.
+            </div>
+        </div>
+        
+        <!-- Deep Loves -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">💜 Deep Loves (Themes)</div>
+                <div class="section-action" onclick="openModal('theme')">+ Add</div>
+            </div>
+            <div class="card">
+                <div class="card-desc">Themes you're drawn to again and again</div>
+                <div class="tags-container" id="themeTags">
+                    <!-- Tags inserted here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Genres -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">📚 Favorite Genres</div>
+                <div class="section-action" onclick="openModal('genre')">+ Add</div>
+            </div>
+            <div class="card">
+                <div class="card-desc">What do you love to write?</div>
+                <div class="tags-container" id="genreTags">
+                    <!-- Tags inserted here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Writing Style -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">✍️ Writing Style</div>
+            </div>
+            <div class="card">
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span class="slider-label">Prose Density</span>
+                        <span class="slider-value" id="denseValue">Balanced</span>
+                    </div>
+                    <input type="range" class="slider" id="denseSlider" min="0" max="100" value="50">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+                        <span>Sparse</span>
+                        <span>Dense</span>
+                    </div>
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span class="slider-label">Tone</span>
+                        <span class="slider-value" id="toneValue">Neutral</span>
+                    </div>
+                    <input type="range" class="slider" id="toneSlider" min="0" max="100" value="50">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+                        <span>Dark</span>
+                        <span>Light</span>
+                    </div>
+                </div>
+                
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span class="slider-label">Pacing</span>
+                        <span class="slider-value" id="paceValue">Medium</span>
+                    </div>
+                    <input type="range" class="slider" id="paceSlider" min="0" max="100" value="50">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+                        <span>Slow Burn</span>
+                        <span>Fast-paced</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Influences -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">⭐ Influences & Inspirations</div>
+                <div class="section-action" onclick="openModal('influence')">+ Add</div>
+            </div>
+            <div class="card">
+                <div class="card-desc">Authors, books, films that inspire you</div>
+                <div class="tags-container" id="influenceTags">
+                    <!-- Tags inserted here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Custom Rules -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">📝 Custom AI Rules</div>
+            </div>
+            <div class="card">
+                <div class="card-desc">Special instructions for The Muse</div>
+                <textarea 
+                    class="vial-textarea" 
+                    id="customRules"
+                    placeholder="E.g., 'Always suggest morally gray characters', 'Avoid clichés about chosen ones', 'I prefer show-don't-tell advice'..."
+                ></textarea>
+            </div>
+        </div>
+        
+        <!-- Save Button -->
+        <button class="save-btn" onclick="saveVial()">💾 Save My Creative DNA</button>
+        
+        <!-- DNA Preview -->
+        <div class="dna-preview">
+            <div class="dna-title">🧬 Your DNA Summary</div>
+            <div class="dna-text" id="dnaSummary">
+                Complete your profile above to see how The Muse understands you...
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Modal -->
+    <div class="modal" id="addModal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-title" id="modalTitle">Add Theme</div>
+            <input type="text" class="modal-input" id="modalInput" placeholder="Enter value...">
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn primary" onclick="addTag()">Add</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentModalType = '';
+        
+        // Default data
+        const defaultThemes = ['Redemption', 'Found Family', 'Identity', 'Power & Corruption'];
+        const defaultGenres = ['Fantasy', 'Sci-Fi', 'Literary Fiction', 'Thriller'];
+        const defaultInfluences = ['Ursula K. Le Guin', 'Brandon Sanderson', 'Studio Ghibli'];
+        
+        // Load vial data
+        function loadVial() {
+            const vial = JSON.parse(localStorage.getItem('theblock_vial') || '{}');
+            
+            // Themes
+            const themes = vial.themes || defaultThemes;
+            renderTags('themeTags', themes, 'theme');
+            
+            // Genres
+            const genres = vial.genres || defaultGenres;
+            renderTags('genreTags', genres, 'genre');
+            
+            // Influences
+            const influences = vial.influences || defaultInfluences;
+            renderTags('influenceTags', influences, 'influence');
+            
+            // Sliders
+            document.getElementById('denseSlider').value = vial.density || 50;
+            document.getElementById('toneSlider').value = vial.tone || 50;
+            document.getElementById('paceSlider').value = vial.pace || 50;
+            updateSliderLabels();
+            
+            // Custom rules
+            document.getElementById('customRules').value = vial.customRules || '';
+            
+            // Update DNA summary
+            updateDNASummary();
+        }
+        
+        // Render tags
+        function renderTags(containerId, tags, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = tags.map(tag => 
+                `<span class="tag selected" onclick="removeTag('${type}', '${tag}')">${tag} ×</span>`
+            ).join('');
+        }
+        
+        // Remove tag
+        function removeTag(type, tag) {
+            const vial = JSON.parse(localStorage.getItem('theblock_vial') || '{}');
+            
+            if (type === 'theme') {
+                vial.themes = (vial.themes || defaultThemes).filter(t => t !== tag);
+            } else if (type === 'genre') {
+                vial.genres = (vial.genres || defaultGenres).filter(t => t !== tag);
+            } else if (type === 'influence') {
+                vial.influences = (vial.influences || defaultInfluences).filter(t => t !== tag);
+            }
+            
+            localStorage.setItem('theblock_vial', JSON.stringify(vial));
+            loadVial();
+        }
+        
+        // Open modal
+        function openModal(type) {
+            currentModalType = type;
+            const titles = {
+                theme: 'Add Theme',
+                genre: 'Add Genre',
+                influence: 'Add Influence'
+            };
+            document.getElementById('modalTitle').textContent = titles[type];
+            document.getElementById('modalInput').value = '';
+            document.getElementById('modalInput').placeholder = `Enter ${type}...`;
+            document.getElementById('addModal').classList.add('open');
+            document.getElementById('modalInput').focus();
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('addModal').classList.remove('open');
+        }
+        
+        // Add tag
+        function addTag() {
+            const input = document.getElementById('modalInput').value.trim();
+            if (!input) return;
+            
+            const vial = JSON.parse(localStorage.getItem('theblock_vial') || '{}');
+            
+            if (currentModalType === 'theme') {
+                vial.themes = vial.themes || [...defaultThemes];
+                if (!vial.themes.includes(input)) vial.themes.push(input);
+            } else if (currentModalType === 'genre') {
+                vial.genres = vial.genres || [...defaultGenres];
+                if (!vial.genres.includes(input)) vial.genres.push(input);
+            } else if (currentModalType === 'influence') {
+                vial.influences = vial.influences || [...defaultInfluences];
+                if (!vial.influences.includes(input)) vial.influences.push(input);
+            }
+            
+            localStorage.setItem('theblock_vial', JSON.stringify(vial));
+            closeModal();
+            loadVial();
+        }
+        
+        // Enter key in modal
+        document.getElementById('modalInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') addTag();
+        });
+        
+        // Slider labels
+        function updateSliderLabels() {
+            const dense = document.getElementById('denseSlider').value;
+            const tone = document.getElementById('toneSlider').value;
+            const pace = document.getElementById('paceSlider').value;
+            
+            document.getElementById('denseValue').textContent = 
+                dense < 33 ? 'Sparse' : dense > 66 ? 'Dense' : 'Balanced';
+            document.getElementById('toneValue').textContent = 
+                tone < 33 ? 'Dark' : tone > 66 ? 'Light' : 'Neutral';
+            document.getElementById('paceValue').textContent = 
+                pace < 33 ? 'Slow Burn' : pace > 66 ? 'Fast-paced' : 'Medium';
+        }
+        
+        // Slider events
+        ['denseSlider', 'toneSlider', 'paceSlider'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateSliderLabels);
+        });
+        
+        // Update DNA Summary
+        function updateDNASummary() {
+            const vial = JSON.parse(localStorage.getItem('theblock_vial') || '{}');
+            const themes = vial.themes || defaultThemes;
+            const genres = vial.genres || defaultGenres;
+            const influences = vial.influences || defaultInfluences;
+            
+            const dense = document.getElementById('denseSlider').value;
+            const tone = document.getElementById('toneSlider').value;
+            const pace = document.getElementById('paceSlider').value;
+            
+            const denseText = dense < 33 ? 'spare, minimalist' : dense > 66 ? 'rich, detailed' : 'balanced';
+            const toneText = tone < 33 ? 'darker themes' : tone > 66 ? 'lighter fare' : 'nuanced tones';
+            const paceText = pace < 33 ? 'slow-burning narratives' : pace > 66 ? 'fast-paced action' : 'measured pacing';
+            
+            const summary = `A writer drawn to ${themes.slice(0, 3).join(', ').toLowerCase()}, working primarily in ${genres.slice(0, 2).join(' and ').toLowerCase()}. Prefers ${denseText} prose with ${toneText} and ${paceText}. Inspired by ${influences.slice(0, 2).join(' and ')}.`;
+            
+            document.getElementById('dnaSummary').textContent = summary;
+        }
+        
+        // Save vial
+        function saveVial() {
+            const vial = JSON.parse(localStorage.getItem('theblock_vial') || '{}');
+            
+            vial.density = document.getElementById('denseSlider').value;
+            vial.tone = document.getElementById('toneSlider').value;
+            vial.pace = document.getElementById('paceSlider').value;
+            vial.customRules = document.getElementById('customRules').value;
+            vial.updatedAt = new Date().toISOString();
+            
+            localStorage.setItem('theblock_vial', JSON.stringify(vial));
+            
+            updateDNASummary();
+            alert('✨ Creative DNA saved! The Muse will now adapt to your style.');
+        }
+        
+        // Load theme
+        const savedTheme = localStorage.getItem('theblock_theme');
+        if (savedTheme === 'zen') {
+            document.body.classList.add('zen-theme');
+        }
+        
+        // Initialize
+        loadVial();
+    </script>
+</body>
+</html>
