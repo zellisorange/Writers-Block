@@ -21,7 +21,160 @@
            Psychedelic Americana / Digital Artisan
            Part of BIG LOVE Holdings
            ===================================================== */
+        /* =====================================================
+           PROJECT SWITCHER SIDEBAR - LEFT
+           ===================================================== */
         
+        .project-switcher-sidebar {
+            width: 250px;
+            height: 100vh;
+            background: var(--bg-nebula);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: var(--space-4);
+        }
+        
+        .switcher-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-5);
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .switcher-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .switcher-new-btn {
+            width: 28px;
+            height: 28px;
+            background: var(--lux-gold);
+            border: none;
+            border-radius: 6px;
+            color: var(--bg-void);
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .switcher-new-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--glass-glow);
+        }
+        
+        .switcher-current {
+            margin-bottom: var(--space-6);
+        }
+        
+        .current-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-2);
+        }
+        
+        .current-project {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--lux-gold);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .current-project:hover {
+            background: rgba(245, 158, 11, 0.15);
+            box-shadow: 0 0 15px var(--glass-glow);
+        }
+        
+        .project-icon {
+            font-size: 1.2rem;
+        }
+        
+        .project-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-bright);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .switcher-divider {
+            height: 1px;
+            background: var(--glass-border);
+            margin: var(--space-4) 0;
+        }
+        
+        .switcher-projects {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .projects-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--space-3);
+        }
+        
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+        
+        .project-item-sidebar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .project-item-sidebar:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--lux-gold);
+            transform: translateX(4px);
+        }
+        
+        .project-item-sidebar.active {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--lux-gold);
+        }
+        
+        .project-item-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+        
+        .project-item-words {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
         :root {
 
 
@@ -201,12 +354,25 @@
            APP LAYOUT
            ===================================================== */
         
-        .app-container {
+  .app-container {
             display: flex;
             height: 100vh;
             width: 100vw;
+            flex-direction: row;
         }
         
+        .app-container > .project-switcher-sidebar {
+            order: 1;
+        }
+        
+        .app-container > .main-content {
+            order: 2;
+            flex: 1;
+        }
+        
+        .app-container > .architect {
+            order: 3;
+        }
         /* =====================================================
            MAIN CONTENT AREA
            ===================================================== */
@@ -853,6 +1019,30 @@
     
     <!-- App Container -->
     <div class="app-container">
+        <!-- LEFT SIDEBAR - PROJECT SWITCHER -->
+        <aside class="project-switcher-sidebar" id="projectSwitcherSidebar">
+            <div class="switcher-header">
+                <div class="switcher-title">📂 Projects</div>
+                <button class="switcher-new-btn" onclick="openNewProjectModal()">+</button>
+            </div>
+            
+            <div class="switcher-current">
+                <div class="current-label">Active</div>
+                <div class="current-project" id="currentProjectDisplay">
+                    <span class="project-icon">📄</span>
+                    <span class="project-name" id="currentProjectName">No Project</span>
+                </div>
+            </div>
+            
+            <div class="switcher-divider"></div>
+            
+            <div class="switcher-projects">
+                <div class="projects-label">All Projects</div>
+                <div class="projects-list" id="projectsList">
+                    <!-- Projects will load here -->
+                </div>
+            </div>
+        </aside>
         
         <!-- Main Content -->
         <main class="main-content">
@@ -1250,6 +1440,54 @@
             
             console.log('✦ Dashboard ready');
         }
+
+
+        // Load project switcher
+        function loadProjectSwitcher() {
+            const projects = projectSwitcher.getAllProjects();
+            const currentProject = projectSwitcher.getCurrentProject();
+            const projectsList = document.getElementById('projectsList');
+            const currentProjectName = document.getElementById('currentProjectName');
+
+            // Update current project display
+            if (currentProject) {
+                currentProjectName.textContent = currentProject.title || 'Untitled';
+            } else {
+                currentProjectName.textContent = 'No Project';
+            }
+
+            // Clear list
+            projectsList.innerHTML = '';
+
+            // Add each project
+            projects.forEach(project => {
+                const wordCount = project.content ? project.content.trim().split(/\s+/).length : 0;
+                const isActive = currentProject && currentProject.id === project.id;
+
+                const item = document.createElement('div');
+                item.className = `project-item-sidebar ${isActive ? 'active' : ''}`;
+                item.innerHTML = `
+                    <span class="project-icon">📄</span>
+                    <span class="project-item-name">${project.title || 'Untitled'}</span>
+                    <span class="project-item-words">${wordCount}</span>
+                `;
+
+                item.addEventListener('click', () => {
+                    projectSwitcher.setCurrentProject(project.id);
+                    loadProjectSwitcher();
+                    alert(`Switched to: ${project.title}`);
+                });
+
+                projectsList.appendChild(item);
+            });
+        }
+
+        // Call on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjectSwitcher();
+        });
+
+
     </script>
     <!-- Feature Info Modal -->
     <div class="feature-modal" id="featureModal" onclick="closeFeatureModal()">
@@ -1317,5 +1555,7 @@
             document.getElementById('featureModal').classList.remove('open');
         }
     </script>
+<script src="js/project-switcher.js"></script>
+
 </body>
 </html>
