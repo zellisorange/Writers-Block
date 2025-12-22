@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="THE BLOCK - Full Page Editor">
+    <meta name="theme-color" content="#0a0a0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <title>THE BLOCK | Editor</title>
+    
+    <style>
+        /* =====================================================
+           THE BLOCK - FULL PAGE EDITOR
+           Distraction-Free Writing Experience
+           Part of BIG LOVE Holdings
+           ===================================================== */
+        
+        :root {
+            /* Cosmic Color System */
+            --bg-void: #050506;
+            --bg-cosmos: #0a0a0b;
+            --bg-nebula: #0f0f12;
+            --bg-stardust: #161619;
+            --bg-paper: #1a1a1d;
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.06);
+            
+            /* The Lux - Accent Colors */
+            --lux-gold: #f59e0b;
+            --lux-amber: #fbbf24;
+            --lux-rose: #f43f5e;
+            --lux-violet: #8b5cf6;
+            --lux-cyan: #06b6d4;
+            --lux-emerald: #10b981;
+            
+            /* Text */
+            --text-bright: #ffffff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            --text-writing: #d4d4d8;
+            
+            /* Glass Effects */
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-glow: rgba(245, 158, 11, 0.15);
+            
+            /* Spacing */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 20px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-10: 40px;
+            --space-12: 48px;
+            
+            /* Layout */
+            --header-height: 56px;
+            --max-writing-width: 720px;
+            
+            /* Effects */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition: all 0.2s ease;
+            
+            /* Fonts */
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-serif: 'Merriweather', Georgia, serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-void);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        /* =====================================================
+           COSMIC BACKGROUND
+           ===================================================== */
+        
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(245, 158, 11, 0.04) 0%, transparent 50%),
+                var(--bg-void);
+        }
+        
+        /* Zen Mode - Darker, more focused */
+        body.zen-mode .cosmic-bg {
+            background: var(--bg-void);
+        }
+        
+        body.zen-mode .editor-header {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        body.zen-mode:hover .editor-header {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        body.zen-mode .editor-footer {
+            opacity: 0.3;
+        }
+        
+        body.zen-mode:hover .editor-footer {
+            opacity: 1;
+        }
+        
+        /* =====================================================
+           EDITOR LAYOUT
+           ===================================================== */
+        
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        /* =====================================================
+           HEADER
+           ===================================================== */
+        
+        .editor-header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-5);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: opacity 0.3s ease;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+        
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        
+        .btn-back:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-bright);
+            border-color: var(--lux-gold);
+        }
+        
+        .project-title-input {
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            outline: none;
+            padding: var(--space-2);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            max-width: 300px;
+        }
+        
+        .project-title-input:hover,
+        .project-title-input:focus {
+            background: var(--bg-glass);
+        }
+        
+        .project-title-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .header-center {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+        
+        .chapter-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .chapter-select {
+            background: var(--bg-stardust);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            padding: var(--space-2) var(--space-4);
+            font-size: 0.85rem;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .chapter-select:focus {
+            border-color: var(--lux-gold);
+        }
+        
+        .btn-add-chapter {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-stardust);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--lux-gold);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-add-chapter:hover {
+            background: var(--lux-gold);
+            color: var(--bg-void);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .save-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .save-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--lux-emerald);
+        }
+        
+        .save-dot.saving {
+            background: var(--lux-amber);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-icon:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-bright);
+        }
+        
+        .btn-icon.active {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--lux-gold);
+            border-color: var(--lux-gold);
+        }
+        
+        /* =====================================================
+           WRITING AREA - THE SOUL
+           ===================================================== */
+        
+        .writing-area {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            padding: var(--space-10) var(--space-5);
+        }
+        
+        .writing-paper {
+            width: 100%;
+            max-width: var(--max-writing-width);
+            min-height: calc(100vh - var(--header-height) - 80px);
+        }
+        
+        .writing-textarea {
+            width: 100%;
+            min-height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: var(--font-serif);
+            font-size: 1.125rem;
+            line-height: 1.9;
+            color: var(--text-writing);
+            caret-color: var(--lux-gold);
+        }
+        
+        .writing-textarea::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        /* Custom scrollbar */
+        .writing-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .writing-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .writing-area::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 3px;
+        }
+        
+        .writing-area::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+        
+        /* =====================================================
+           FOOTER - STATS BAR
+           ===================================================== */
+        
+        .editor-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-3) var(--space-5);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            transition: opacity 0.3s ease;
+        }
+        
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-5);
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+        
+        .stat-value {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .realm-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-1) var(--space-3);
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            color: var(--lux-violet);
+        }
+        
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .ai-muse-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--lux-gold);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .ai-muse-btn:hover {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(139, 92, 246, 0.2));
+            border-color: var(--lux-gold);
+        }
+        
+        /* =====================================================
+           MOBILE RESPONSIVE
+           ===================================================== */
+        
+        @media (max-width: 768px) {
+            .editor-header {
+                padding: 0 var(--space-3);
+            }
+            
+            .project-title-input {
+                max-width: 150px;
+                font-size: 0.9rem;
+            }
+            
+            .chapter-nav {
+                display: none;
+            }
+            
+            .writing-area {
+                padding: var(--space-5) var(--space-4);
+            }
+            
+            .writing-textarea {
+                font-size: 1rem;
+                line-height: 1.8;
+            }
+            
+            .editor-footer {
+                flex-wrap: wrap;
+                gap: var(--space-2);
+                padding: var(--space-2) var(--space-3);
+            }
+            
+            .footer-left {
+                gap: var(--space-3);
+            }
+            
+            .stat {
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* =====================================================
+           NEW DRAFT MODAL
+           ===================================================== */
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            width: 90%;
+            max-width: 450px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: var(--space-2);
+            text-align: center;
+        }
+        
+        .modal-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: var(--space-6);
+            text-align: center;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: var(--space-4);
+            background: var(--bg-stardust);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--text-bright);
+            font-size: 1rem;
+            outline: none;
+            margin-bottom: var(--space-5);
+            transition: var(--transition);
+        }
+        
+        .modal-input:focus {
+            border-color: var(--lux-gold);
+            box-shadow: 0 0 0 3px var(--glass-glow);
+        }
+        
+        .modal-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: var(--space-3);
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .modal-btn-secondary {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+        }
+        
+        .modal-btn-secondary:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-bright);
+        }
+        
+        .modal-btn-primary {
+            background: var(--lux-gold);
+            border: none;
+            color: var(--bg-void);
+        }
+        
+        .modal-btn-primary:hover {
+            background: var(--lux-amber);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Cosmic Background -->
+    <div class="cosmic-bg"></div>
+    
+    <!-- New Draft Modal -->
+    <div class="modal-overlay" id="newDraftModal">
+        <div class="modal-content">
+            <h2 class="modal-title">✨ New Draft</h2>
+            <p class="modal-subtitle">What will you create today?</p>
+            <input 
+                type="text" 
+                class="modal-input" 
+                id="newDraftTitle" 
+                placeholder="Enter your title..."
+                autofocus
+            />
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-secondary" id="modalCancel">Cancel</button>
+                <button class="modal-btn modal-btn-primary" id="modalCreate">Begin Writing</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Editor Container -->
+    <div class="editor-container">
+        
+        <!-- Header -->
+        <header class="editor-header">
+            <div class="header-left">
+                <a href="index.html" class="btn-back">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <input 
+                    type="text" 
+                    class="project-title-input" 
+                    id="projectTitle"
+                    placeholder="Untitled"
+                />
+            </div>
+            
+            <div class="header-center">
+                <div class="chapter-nav">
+                    <select class="chapter-select" id="chapterSelect">
+                        <option value="1">Chapter 1</option>
+                    </select>
+                    <button class="btn-add-chapter" id="addChapter" title="Add Chapter">+</button>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="save-status">
+                    <div class="save-dot" id="saveDot"></div>
+                    <span id="saveStatus">Saved</span>
+                </div>
+                <button class="btn-icon" id="zenModeBtn" title="Zen Mode">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        
+        <!-- Writing Area -->
+        <div class="writing-area">
+            <div class="writing-paper">
+                <textarea 
+                    class="writing-textarea" 
+                    id="writingArea"
+                    placeholder="Begin your story here...
+
+Let the words flow. Don't worry about perfection—that's what editing is for. Right now, just write.
+
+The first draft is just you telling yourself the story."
+                ></textarea>
+            </div>
+        </div>
+        
+        <!-- Footer Stats -->
+        <footer class="editor-footer">
+            <div class="footer-left">
+                <div class="stat">
+                    <span>Words:</span>
+                    <span class="stat-value" id="wordCount">0</span>
+                </div>
+                <div class="stat">
+                    <span>Characters:</span>
+                    <span class="stat-value" id="charCount">0</span>
+                </div>
+                <div class="stat">
+                    <span>Pages:</span>
+                    <span class="stat-value" id="pageCount">0</span>
+                </div>
+                <div class="realm-indicator">
+                    <span>🔮</span>
+                    <span>Realm <span id="currentRealm">1</span></span>
+                </div>
+            </div>
+            <div class="footer-right">
+                <button class="ai-muse-btn" id="aiMuseBtn">
+                    <span>✨</span>
+                    <span>The Muse</span>
+                </button>
+            </div>
+        </footer>
+        
+    </div>
+    
+    <!-- Supabase -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        
+        const SUPABASE_URL = 'https://wwzhafvlqejccrskvwhb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3emhhZnZscWVqY2Nyc2t2d2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyOTk0MzgsImV4cCI6MjA4MTg3NTQzOH0.ajBE95GUoGNHmWiJ7WMFj0StVRrLd6Rp58I0sEh55pQ';
+        
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        window.SupabaseAuth = {
+            getUser: async () => {
+                const { data: { user } } = await supabase.auth.getUser();
+                return user;
+            },
+            client: supabase
+        };
+        
+        window.dispatchEvent(new Event('supabase-ready'));
+    </script>
+    
+    <!-- Editor Script -->
+    <script>
+        /* =====================================================
+           THE BLOCK - FULL PAGE EDITOR
+           ===================================================== */
+        
+        // State
+        const EditorState = {
+            projectId: null,
+            title: 'Untitled',
+            content: '',
+            chapters: [{ id: 1, title: 'Chapter 1', content: '' }],
+            currentChapter: 1,
+            lastSaved: null,
+            isDirty: false,
+            isNewDraft: false
+        };
+        
+        // DOM Elements
+        const DOM = {
+            writingArea: document.getElementById('writingArea'),
+            projectTitle: document.getElementById('projectTitle'),
+            wordCount: document.getElementById('wordCount'),
+            charCount: document.getElementById('charCount'),
+            pageCount: document.getElementById('pageCount'),
+            currentRealm: document.getElementById('currentRealm'),
+            saveDot: document.getElementById('saveDot'),
+            saveStatus: document.getElementById('saveStatus'),
+            zenModeBtn: document.getElementById('zenModeBtn'),
+            chapterSelect: document.getElementById('chapterSelect'),
+            addChapter: document.getElementById('addChapter'),
+            aiMuseBtn: document.getElementById('aiMuseBtn'),
+            newDraftModal: document.getElementById('newDraftModal'),
+            newDraftTitle: document.getElementById('newDraftTitle'),
+            modalCreate: document.getElementById('modalCreate'),
+            modalCancel: document.getElementById('modalCancel')
+        };
+        
+        // Initialize
+        function initEditor() {
+            console.log('✦ THE BLOCK Editor initializing...');
+            
+            checkAuth();
+            parseURL();
+            bindEvents();
+            
+            console.log('✦ Editor ready');
+        }
+        
+        // Wait for Supabase
+        window.addEventListener('supabase-ready', initEditor);
+        
+        let attempts = 0;
+        const checkSupabase = setInterval(() => {
+            attempts++;
+            if (window.SupabaseAuth) {
+                clearInterval(checkSupabase);
+                if (attempts > 1) initEditor();
+            } else if (attempts > 50) {
+                clearInterval(checkSupabase);
+                console.error('✦ Supabase failed to load');
+            }
+        }, 100);
+        
+        // Auth check
+        async function checkAuth() {
+            try {
+                const user = await SupabaseAuth.getUser();
+                if (!user) {
+                    window.location.href = 'auth.html';
+                }
+            } catch (error) {
+                window.location.href = 'auth.html';
+            }
+        }
+        
+        // Parse URL params
+        function parseURL() {
+            const params = new URLSearchParams(window.location.search);
+            
+            if (params.get('new') === 'true') {
+                // Show new draft modal
+                EditorState.isNewDraft = true;
+                showNewDraftModal();
+            } else if (params.get('id')) {
+                // Load existing project
+                EditorState.projectId = params.get('id');
+                loadProject(EditorState.projectId);
+            } else {
+                // Create new untitled
+                createNewProject('Untitled');
+            }
+        }
+        
+        // Show new draft modal
+        function showNewDraftModal() {
+            DOM.newDraftModal.classList.add('open');
+            DOM.newDraftTitle.focus();
+        }
+        
+        // Hide modal
+        function hideNewDraftModal() {
+            DOM.newDraftModal.classList.remove('open');
+        }
+        
+        // Create new project
+        function createNewProject(title) {
+            EditorState.projectId = 'project_' + Date.now();
+            EditorState.title = title;
+            EditorState.content = '';
+            EditorState.chapters = [{ id: 1, title: 'Chapter 1', content: '' }];
+            
+            DOM.projectTitle.value = title;
+            DOM.writingArea.value = '';
+            
+            updateStats();
+            saveProject();
+            
+            // Update URL without reload
+            window.history.replaceState({}, '', `editor.html?id=${EditorState.projectId}`);
+        }
+        
+        // Load project
+        function loadProject(id) {
+            const projects = JSON.parse(localStorage.getItem('theblock_projects') || '[]');
+            const project = projects.find(p => p.id === id);
+            
+            if (project) {
+                EditorState.projectId = project.id;
+                EditorState.title = project.title;
+                EditorState.content = project.content || '';
+                EditorState.chapters = project.chapters || [{ id: 1, title: 'Chapter 1', content: project.content || '' }];
+                
+                DOM.projectTitle.value = project.title;
+                DOM.writingArea.value = EditorState.content;
+                
+                updateStats();
+            } else {
+                createNewProject('Untitled');
+            }
+        }
+        
+        // Save project
+        function saveProject() {
+            const projects = JSON.parse(localStorage.getItem('theblock_projects') || '[]');
+            const index = projects.findIndex(p => p.id === EditorState.projectId);
+            
+            const projectData = {
+                id: EditorState.projectId,
+                title: EditorState.title,
+                content: EditorState.content,
+                chapters: EditorState.chapters,
+                updatedAt: new Date().toISOString()
+            };
+            
+            if (index >= 0) {
+                projects[index] = projectData;
+            } else {
+                projectData.createdAt = new Date().toISOString();
+                projects.push(projectData);
+            }
+            
+            localStorage.setItem('theblock_projects', JSON.stringify(projects));
+            
+            EditorState.isDirty = false;
+            EditorState.lastSaved = new Date();
+            updateSaveStatus('Saved');
+        }
+        
+        // Update save status
+        function updateSaveStatus(status) {
+            DOM.saveStatus.textContent = status;
+            DOM.saveDot.classList.toggle('saving', status === 'Saving...');
+        }
+        
+        // Auto-save with debounce
+        let saveTimeout;
+        function autoSave() {
+            EditorState.isDirty = true;
+            updateSaveStatus('Saving...');
+            
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                saveProject();
+            }, 1000);
+        }
+        
+        // Update stats
+        function updateStats() {
+            const text = DOM.writingArea.value;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const chars = text.length;
+            const pages = Math.max(1, Math.ceil(words / 250));
+            const realm = Math.min(9, Math.floor(words / 500) + 1);
+            
+            DOM.wordCount.textContent = words.toLocaleString();
+            DOM.charCount.textContent = chars.toLocaleString();
+            DOM.pageCount.textContent = pages;
+            DOM.currentRealm.textContent = realm;
+        }
+        
+        // Bind events
+        function bindEvents() {
+            // Writing area
+            DOM.writingArea.addEventListener('input', () => {
+                EditorState.content = DOM.writingArea.value;
+                updateStats();
+                autoSave();
+            });
+            
+            // Title change
+            DOM.projectTitle.addEventListener('input', () => {
+                EditorState.title = DOM.projectTitle.value || 'Untitled';
+                autoSave();
+            });
+            
+            // Zen mode
+            DOM.zenModeBtn.addEventListener('click', () => {
+                document.body.classList.toggle('zen-mode');
+                DOM.zenModeBtn.classList.toggle('active');
+            });
+            
+            // Add chapter
+            DOM.addChapter.addEventListener('click', () => {
+                const newId = EditorState.chapters.length + 1;
+                EditorState.chapters.push({ id: newId, title: `Chapter ${newId}`, content: '' });
+                
+                const option = document.createElement('option');
+                option.value = newId;
+                option.textContent = `Chapter ${newId}`;
+                DOM.chapterSelect.appendChild(option);
+                DOM.chapterSelect.value = newId;
+                
+                // Switch to new chapter
+                switchChapter(newId);
+            });
+            
+            // Chapter select
+            DOM.chapterSelect.addEventListener('change', () => {
+                switchChapter(parseInt(DOM.chapterSelect.value));
+            });
+            
+            // Modal events
+            DOM.modalCreate.addEventListener('click', () => {
+                const title = DOM.newDraftTitle.value.trim() || 'Untitled';
+                hideNewDraftModal();
+                createNewProject(title);
+                DOM.writingArea.focus();
+            });
+            
+            DOM.modalCancel.addEventListener('click', () => {
+                hideNewDraftModal();
+                if (EditorState.isNewDraft) {
+                    window.location.href = 'index.html';
+                }
+            });
+            
+            // Enter key in modal
+            DOM.newDraftTitle.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    DOM.modalCreate.click();
+                }
+            });
+            
+            // AI Muse button
+            DOM.aiMuseBtn.addEventListener('click', () => {
+                alert('✨ The Muse is coming soon!\n\nPowered by Anthropic Claude & Google Gemini');
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // Cmd/Ctrl + S = Save
+                if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+                    e.preventDefault();
+                    saveProject();
+                }
+                
+                // Escape = Exit zen mode
+                if (e.key === 'Escape') {
+                    document.body.classList.remove('zen-mode');
+                    DOM.zenModeBtn.classList.remove('active');
+                }
+            });
+        }
+        
+        // Switch chapter
+        function switchChapter(chapterId) {
+            // Save current chapter content
+            const currentChapter = EditorState.chapters.find(c => c.id === EditorState.currentChapter);
+            if (currentChapter) {
+                currentChapter.content = DOM.writingArea.value;
+            }
+            
+            // Load new chapter
+            EditorState.currentChapter = chapterId;
+            const newChapter = EditorState.chapters.find(c => c.id === chapterId);
+            
+            if (newChapter) {
+                DOM.writingArea.value = newChapter.content || '';
+                EditorState.content = newChapter.content || '';
+                updateStats();
+            }
+            
+            autoSave();
+        }
+    </script>
+    
+</body>
+</html>

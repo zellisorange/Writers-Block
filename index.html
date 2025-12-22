@@ -2,155 +2,910 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="THE BLOCK - Creative Writing PWA by BIG LOVE Holdings">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="THE BLOCK - Where Writer's Block Becomes Writer's Gift">
     <meta name="theme-color" content="#0a0a0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
-    
-    <!-- Google Fonts - Inter (The Modern Standard) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="css/styles.css">
+    <title>THE BLOCK | Dashboard</title>
     
-    <title>THE BLOCK | Creative Writing</title>
+    <style>
+        /* =====================================================
+           THE BLOCK - DASHBOARD + ARCHITECT SIDEBAR
+           Psychedelic Americana / Digital Artisan
+           Part of BIG LOVE Holdings
+           ===================================================== */
+        
+        :root {
+            /* Cosmic Color System */
+            --bg-void: #050506;
+            --bg-cosmos: #0a0a0b;
+            --bg-nebula: #0f0f12;
+            --bg-stardust: #161619;
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.06);
+            
+            /* The Lux - Accent Colors */
+            --lux-gold: #f59e0b;
+            --lux-amber: #fbbf24;
+            --lux-rose: #f43f5e;
+            --lux-violet: #8b5cf6;
+            --lux-cyan: #06b6d4;
+            --lux-emerald: #10b981;
+            
+            /* Text */
+            --text-bright: #ffffff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            
+            /* Glass Effects */
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-glow: rgba(245, 158, 11, 0.15);
+            
+            /* Spacing */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 20px;
+            --space-6: 24px;
+            --space-8: 32px;
+            
+            /* Layout */
+            --architect-width: 280px;
+            --header-height: 60px;
+            
+            /* Effects */
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition: all 0.2s ease;
+            
+            /* Fonts */
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-void);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        /* =====================================================
+           COSMIC BACKGROUND - THE LUX
+           ===================================================== */
+        
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.04) 0%, transparent 70%),
+                var(--bg-void);
+            animation: cosmicShift 30s ease-in-out infinite;
+        }
+        
+        @keyframes cosmicShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* =====================================================
+           APP LAYOUT
+           ===================================================== */
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        /* =====================================================
+           MAIN CONTENT AREA
+           ===================================================== */
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-6);
+            border-bottom: 1px solid var(--glass-border);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .logo-icon {
+            color: var(--lux-gold);
+            filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.4));
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-bright);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+        
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-icon:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-bright);
+            border-color: var(--lux-gold);
+        }
+        
+        /* Dashboard Content */
+        .dashboard {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-8);
+        }
+        
+        .welcome-section {
+            margin-bottom: var(--space-8);
+        }
+        
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--text-bright);
+            margin-bottom: var(--space-2);
+        }
+        
+        .welcome-title strong {
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--lux-gold), var(--lux-amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .welcome-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-5);
+            margin-bottom: var(--space-8);
+        }
+        
+        .stat-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            border-color: var(--lux-gold);
+            box-shadow: 0 0 30px var(--glass-glow);
+        }
+        
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-3);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--text-bright);
+            margin-bottom: var(--space-1);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            margin-bottom: var(--space-8);
+        }
+        
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: var(--space-4);
+        }
+        
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-4);
+        }
+        
+        .action-card {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-5);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .action-card:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--lux-gold);
+            transform: translateY(-2px);
+        }
+        
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-stardust);
+            border-radius: var(--radius-md);
+            font-size: 1.25rem;
+        }
+        
+        .action-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: var(--space-1);
+        }
+        
+        .action-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        /* =====================================================
+           THE ARCHITECT - RIGHT SIDEBAR
+           ===================================================== */
+        
+        .architect {
+            width: var(--architect-width);
+            height: 100vh;
+            background: var(--bg-glass);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-left: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Soul ID - Top Section */
+        .soul-id {
+            padding: var(--space-5);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .passport {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3);
+            background: var(--bg-stardust);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .passport:hover {
+            background: var(--bg-glass-hover);
+        }
+        
+        .passport-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--lux-violet), var(--lux-gold));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .passport-info {
+            flex: 1;
+        }
+        
+        .passport-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .passport-tier {
+            font-size: 0.7rem;
+            color: var(--lux-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Zen Switch */
+        .zen-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: var(--space-4);
+            padding: var(--space-3);
+            background: var(--bg-stardust);
+            border-radius: var(--radius-md);
+        }
+        
+        .zen-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .toggle {
+            width: 44px;
+            height: 24px;
+            background: var(--bg-nebula);
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .toggle.active {
+            background: var(--lux-gold);
+        }
+        
+        .toggle-knob {
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: var(--transition);
+        }
+        
+        .toggle.active .toggle-knob {
+            left: 23px;
+        }
+        
+        /* Architect Tools - Middle Section */
+        .architect-tools {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-4);
+        }
+        
+        .tool-section {
+            margin-bottom: var(--space-5);
+        }
+        
+        .tool-section-title {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: var(--space-3);
+            padding-left: var(--space-3);
+        }
+        
+        .tool-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-3);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        .tool-item:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-bright);
+        }
+        
+        .tool-item.active {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--lux-gold);
+        }
+        
+        .tool-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .tool-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .tool-badge {
+            margin-left: auto;
+            background: var(--lux-gold);
+            color: var(--bg-void);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+        
+        /* Shelf Dropdown */
+        .shelf-projects {
+            margin-left: var(--space-8);
+            margin-top: var(--space-2);
+            display: none;
+        }
+        
+        .shelf-projects.open {
+            display: block;
+        }
+        
+        .project-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        
+        .project-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+        
+        .project-item.new-draft {
+            color: var(--lux-gold);
+            font-weight: 500;
+        }
+        
+        /* The Portal - Bottom Section */
+        .architect-footer {
+            padding: var(--space-4);
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-2);
+        }
+        
+        .portal-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-1);
+            padding: var(--space-3);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-muted);
+        }
+        
+        .portal-item:hover {
+            background: var(--bg-glass-hover);
+            color: var(--text-bright);
+        }
+        
+        .portal-icon {
+            font-size: 1.25rem;
+        }
+        
+        .portal-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .biglove-footer {
+            text-align: center;
+            margin-top: var(--space-4);
+            padding-top: var(--space-4);
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .biglove-text {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+        
+        .biglove-text span {
+            color: var(--lux-rose);
+        }
+        
+        /* =====================================================
+           MOBILE RESPONSIVE
+           ===================================================== */
+        
+        @media (max-width: 768px) {
+            .architect {
+                position: fixed;
+                right: -100%;
+                top: 0;
+                width: 85%;
+                max-width: 320px;
+                z-index: 1000;
+                transition: right 0.3s ease;
+            }
+            
+            .architect.open {
+                right: 0;
+            }
+            
+            .mobile-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 999;
+            }
+            
+            .mobile-overlay.open {
+                display: block;
+            }
+            
+            .dashboard {
+                padding: var(--space-5);
+            }
+            
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* =====================================================
+           ANIMATIONS
+           ===================================================== */
+        
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 5px var(--glass-glow); }
+            50% { box-shadow: 0 0 20px var(--glass-glow); }
+        }
+        
+        .pulse {
+            animation: pulse-gold 2s ease-in-out infinite;
+        }
+    </style>
 </head>
 <body>
     
+    <!-- Cosmic Background -->
+    <div class="cosmic-bg"></div>
+    
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
     <!-- App Container -->
-    <div id="app">
-        
-      <div class="sidebar-header">
-                <div class="logo">
-                    <span class="logo-icon">
-                        <svg class="horus-eye" viewBox="0 0 40 40" width="28" height="28">
-                            <circle cx="20" cy="20" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
-                            <circle cx="20" cy="20" r="3" fill="currentColor"/>
-                            <path d="M4 20 Q12 8 20 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M36 20 Q28 8 20 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M20 28 Q20 35 14 38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </span>
-                    <span class="logo-text">THE BLOCK</span>
-                </div>
-                <div class="user-info">
-                    <span id="user-name" class="user-name">Writer</span>
-                    <span id="user-tier" class="tier-badge free">FREE</span>
-                </div>
-            </div>
-            
-            <nav class="sidebar-nav">
-                <button id="btn-new" class="nav-item active">
-                    <span class="nav-icon">+</span>
-                    <span class="nav-label">New Draft</span>
-                </button>
-                <button id="btn-projects" class="nav-item">
-                    <span class="nav-icon">📁</span>
-                    <span class="nav-label">Projects</span>
-                </button>
-                <button id="btn-compost" class="nav-item">
-                    <span class="nav-icon">🌱</span>
-                    <span class="nav-label">Compost</span>
-                </button>
-            </nav>
-<div class="sidebar-footer">
-                <div class="realm-badge">
-                    <span class="realm-label">Current Realm</span>
-                    <span id="realm-indicator" class="realm-value">1</span>
-                </div>
-                <button id="btn-logout" class="btn-logout">
-                    <span class="logout-icon">↩</span>
-                    <span>Sign Out</span>
-                </button>
-            </div>
-        </aside>
+    <div class="app-container">
         
         <!-- Main Content -->
         <main class="main-content">
             
-            <!-- Top Bar -->
-            <header class="topbar">
-                <div class="topbar-left">
-                    <button id="btn-menu" class="icon-btn mobile-only">☰</button>
+            <!-- Header -->
+            <header class="header">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" width="32" height="32">
+                        <circle cx="20" cy="20" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="20" cy="20" r="3" fill="currentColor"/>
+                        <path d="M4 20 Q12 8 20 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M36 20 Q28 8 20 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 28 Q20 35 14 38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span class="logo-text">THE BLOCK</span>
                 </div>
-                <div class="topbar-center">
-                    <span id="save-status" class="save-status">✓ Saved</span>
-                </div>
-                <div class="topbar-right">
-                    <span id="word-count" class="word-count">0 words</span>
+                <div class="header-actions">
+                    <button class="btn-icon" id="btnArchitect" title="Open Architect">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                    </button>
                 </div>
             </header>
             
-            <!-- Editor Container -->
-            <div class="editor-container">
+            <!-- Dashboard -->
+            <div class="dashboard">
                 
-                <!-- Title Input -->
-                <input 
-                    type="text" 
-                    id="project-title" 
-                    class="project-title" 
-                    placeholder="Untitled" 
-                    spellcheck="false"
-                />
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <h1 class="welcome-title">Welcome back, <strong id="userName">Writer</strong></h1>
+                    <p class="welcome-subtitle">Where Writer's Block Becomes Writer's Gift</p>
+                </div>
                 
-                <!-- The Editor -->
-                <div 
-                    id="editor" 
-                    class="editor" 
-                    contenteditable="true" 
-                    data-placeholder="Start writing..."
-                    spellcheck="true"
-                ></div>
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-value" id="totalWords">0</div>
+                        <div class="stat-label">Words Written</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📚</div>
+                        <div class="stat-value" id="totalProjects">0</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔮</div>
+                        <div class="stat-value" id="currentRealm">1</div>
+                        <div class="stat-label">Current Realm</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-value" id="streak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h2 class="section-title">Quick Actions</h2>
+                    <div class="action-cards">
+                        <a href="editor.html?new=true" class="action-card">
+                            <div class="action-icon">✨</div>
+                            <div class="action-info">
+                                <h3>Start New Draft</h3>
+                                <p>Begin a fresh creative journey</p>
+                            </div>
+                        </a>
+                        <a href="#" class="action-card" id="continueWriting">
+                            <div class="action-icon">📖</div>
+                            <div class="action-info">
+                                <h3>Continue Writing</h3>
+                                <p>Pick up where you left off</p>
+                            </div>
+                        </a>
+                        <a href="#" class="action-card" id="openCompost">
+                            <div class="action-icon">🌱</div>
+                            <div class="action-info">
+                                <h3>Compost Bin</h3>
+                                <p>Mine ideas from deleted drafts</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
                 
             </div>
             
         </main>
         
+        <!-- THE ARCHITECT - Right Sidebar -->
+        <aside class="architect" id="architect">
+            
+            <!-- Soul ID -->
+            <div class="soul-id">
+                <div class="passport" id="passport">
+                    <div class="passport-avatar" id="userAvatar">W</div>
+                    <div class="passport-info">
+                        <div class="passport-name" id="passportName">Writer</div>
+                        <div class="passport-tier">FREE TIER</div>
+                    </div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+                
+                <div class="zen-switch">
+                    <span class="zen-label">Zen Mode</span>
+                    <div class="toggle" id="zenToggle">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Architect Tools -->
+            <div class="architect-tools">
+                
+                <!-- The Shelf -->
+                <div class="tool-section">
+                    <div class="tool-section-title">Workspace</div>
+                    
+                    <div class="tool-item" id="shelfToggle">
+                        <div class="tool-icon">📚</div>
+                        <span class="tool-label">The Shelf</span>
+                        <span class="tool-badge" id="projectCount">0</span>
+                    </div>
+                    
+                    <div class="shelf-projects" id="shelfProjects">
+                        <!-- Projects will be inserted here -->
+                        <div class="project-item new-draft" id="newDraftBtn">
+                            <span>+</span>
+                            <span>New Draft</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tool-item" id="vialBtn">
+                        <div class="tool-icon">🔮</div>
+                        <span class="tool-label">The Vial</span>
+                    </div>
+                    
+                    <div class="tool-item" id="loomBtn">
+                        <div class="tool-icon">🧵</div>
+                        <span class="tool-label">The Loom</span>
+                    </div>
+                    
+                    <div class="tool-item" id="characterBtn">
+                        <div class="tool-icon">👥</div>
+                        <span class="tool-label">Character Deck</span>
+                    </div>
+                </div>
+                
+                <!-- Gardener Tools -->
+                <div class="tool-section">
+                    <div class="tool-section-title">Gardener</div>
+                    
+                    <div class="tool-item" id="compostBtn">
+                        <div class="tool-icon">🌱</div>
+                        <span class="tool-label">Compost Bin</span>
+                    </div>
+                    
+                    <div class="tool-item" id="grimoireBtn">
+                        <div class="tool-icon">📖</div>
+                        <span class="tool-label">The Grimoire</span>
+                    </div>
+                </div>
+                
+                <!-- Settings -->
+                <div class="tool-section">
+                    <div class="tool-section-title">System</div>
+                    
+                    <div class="tool-item" id="settingsBtn">
+                        <div class="tool-icon">⚙️</div>
+                        <span class="tool-label">Settings</span>
+                    </div>
+                    
+                    <div class="tool-item" id="contactBtn">
+                        <div class="tool-icon">📧</div>
+                        <span class="tool-label">Contact</span>
+                    </div>
+                    
+                    <div class="tool-item" id="aiEthicsBtn">
+                        <div class="tool-icon">🤖</div>
+                        <span class="tool-label">Ethical A.I.</span>
+                    </div>
+                    
+                    <div class="tool-item" id="logoutBtn">
+                        <div class="tool-icon">🚪</div>
+                        <span class="tool-label">Sign Out</span>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- The Portal -->
+            <div class="architect-footer">
+                <div class="portal-grid">
+                    <a href="#" class="portal-item" title="Electric Lady Grand Studios">
+                        <span class="portal-icon">🎸</span>
+                        <span class="portal-label">ELGS</span>
+                    </a>
+                    <a href="#" class="portal-item" title="PRISM Search">
+                        <span class="portal-icon">🔺</span>
+                        <span class="portal-label">PRISM</span>
+                    </a>
+                    <a href="#" class="portal-item" title="Lyric Bird">
+                        <span class="portal-icon">🐦</span>
+                        <span class="portal-label">LYRIC</span>
+                    </a>
+                </div>
+                
+                <div class="biglove-footer">
+                    <p class="biglove-text">Part of <span>BIG LOVE</span> Holdings</p>
+                </div>
+            </div>
+            
+        </aside>
+        
     </div>
     
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('✦ SW registered'))
-                .catch(err => console.log('✦ SW error:', err));
-        }
-    </script>
-    
-<!-- Supabase Library -->
-     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>rc="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
-    <!-- Supabase Connection -->
-    <script>
-        // Wait for Supabase to load, then initialize
+    <!-- Supabase -->
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        
         const SUPABASE_URL = 'https://wwzhafvlqejccrskvwhb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3emhhZnZscWVqY2Nyc2t2d2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyOTk0MzgsImV4cCI6MjA4MTg3NTQzOH0.ajBE95GUoGNHmWiJ7WMFj0StVRrLd6Rp58I0sEh55pQ';
         
-           const { createClient } = window.supabase;
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        // Auth functions
         window.SupabaseAuth = {
-            signUp: async (email, password, name) => {
-                const { data, error } = await supabase.auth.signUp({
-                    email, password,
-                    options: { data: { name, tier: 'free' } }
-                });
-                if (error) throw error;
-                return data;
-            },
-            signIn: async (email, password) => {
-                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) throw error;
-                return data;
-            },
             signOut: async () => {
                 const { error } = await supabase.auth.signOut();
                 if (error) throw error;
@@ -160,20 +915,162 @@
                 const { data: { user } } = await supabase.auth.getUser();
                 return user;
             },
-            resetPassword: async (email) => {
-                const { data, error } = await supabase.auth.resetPasswordForEmail(email);
-                if (error) throw error;
-                return data;
-            },
             client: supabase
         };
         
-        console.log('✦ Supabase ready');
+        window.dispatchEvent(new Event('supabase-ready'));
     </script>
     
-    <!-- Main App Script -->
-    <script src="js/app.js"></script>
-
+    <!-- App Script -->
+    <script>
+        // Wait for Supabase
+        function initApp() {
+            console.log('✦ THE BLOCK Dashboard initializing...');
+            
+            // Check auth
+            checkAuth();
+            
+            // Bind events
+            bindEvents();
+            
+            // Load data
+            loadDashboardData();
+        }
+        
+        window.addEventListener('supabase-ready', initApp);
+        
+        // Check every 100ms for up to 5 seconds
+        let attempts = 0;
+        const checkSupabase = setInterval(() => {
+            attempts++;
+            if (window.SupabaseAuth) {
+                clearInterval(checkSupabase);
+                if (attempts > 1) initApp();
+            } else if (attempts > 50) {
+                clearInterval(checkSupabase);
+                console.error('✦ Supabase failed to load');
+            }
+        }, 100);
+        
+        // Auth check
+        async function checkAuth() {
+            try {
+                const user = await SupabaseAuth.getUser();
+                if (!user) {
+                    window.location.href = 'auth.html';
+                    return;
+                }
+                
+                // Update UI with user info
+                const name = user.user_metadata?.name || user.email.split('@')[0];
+                document.getElementById('userName').textContent = name;
+                document.getElementById('passportName').textContent = name;
+                document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+                
+                console.log('✦ User authenticated:', user.email);
+            } catch (error) {
+                console.log('✦ Auth check failed, redirecting...');
+                window.location.href = 'auth.html';
+            }
+        }
+        
+        // Bind events
+        function bindEvents() {
+            // Mobile architect toggle
+            const btnArchitect = document.getElementById('btnArchitect');
+            const architect = document.getElementById('architect');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            btnArchitect?.addEventListener('click', () => {
+                architect.classList.toggle('open');
+                overlay.classList.toggle('open');
+            });
+            
+            overlay?.addEventListener('click', () => {
+                architect.classList.remove('open');
+                overlay.classList.remove('open');
+            });
+            
+            // Shelf toggle
+            const shelfToggle = document.getElementById('shelfToggle');
+            const shelfProjects = document.getElementById('shelfProjects');
+            
+            shelfToggle?.addEventListener('click', () => {
+                shelfProjects.classList.toggle('open');
+            });
+            
+            // New draft
+            const newDraftBtn = document.getElementById('newDraftBtn');
+            newDraftBtn?.addEventListener('click', () => {
+                window.location.href = 'editor.html?new=true';
+            });
+            
+            // Zen toggle
+            const zenToggle = document.getElementById('zenToggle');
+            zenToggle?.addEventListener('click', () => {
+                zenToggle.classList.toggle('active');
+            });
+            
+            // Logout
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn?.addEventListener('click', async () => {
+                if (confirm('Sign out of THE BLOCK?')) {
+                    try {
+                        await SupabaseAuth.signOut();
+                        window.location.href = 'auth.html';
+                    } catch (error) {
+                        window.location.href = 'auth.html';
+                    }
+                }
+            });
+        }
+        
+        // Load dashboard data
+        function loadDashboardData() {
+            // Load from localStorage for now
+            const projects = JSON.parse(localStorage.getItem('theblock_projects') || '[]');
+            const compost = JSON.parse(localStorage.getItem('theblock_compost') || '[]');
+            
+            // Calculate stats
+            let totalWords = 0;
+            projects.forEach(p => {
+                const words = p.content ? p.content.trim().split(/\s+/).filter(w => w).length : 0;
+                totalWords += words;
+            });
+            
+            // Update UI
+            document.getElementById('totalWords').textContent = totalWords.toLocaleString();
+            document.getElementById('totalProjects').textContent = projects.length;
+            document.getElementById('projectCount').textContent = projects.length;
+            
+            // Calculate realm (1-9 based on total words)
+            const realm = Math.min(9, Math.floor(totalWords / 1000) + 1);
+            document.getElementById('currentRealm').textContent = realm;
+            
+            // Populate shelf
+            const shelfProjects = document.getElementById('shelfProjects');
+            const newDraftBtn = shelfProjects.querySelector('.new-draft');
+            
+            projects.forEach(project => {
+                const item = document.createElement('div');
+                item.className = 'project-item';
+                item.innerHTML = `<span>📄</span><span>${project.title || 'Untitled'}</span>`;
+                item.addEventListener('click', () => {
+                    window.location.href = `editor.html?id=${project.id}`;
+                });
+                shelfProjects.insertBefore(item, newDraftBtn);
+            });
+            
+            // Continue writing link
+            const continueBtn = document.getElementById('continueWriting');
+            if (projects.length > 0) {
+                const lastProject = projects[projects.length - 1];
+                continueBtn.href = `editor.html?id=${lastProject.id}`;
+            } else {
+                continueBtn.href = 'editor.html?new=true';
+            }
+        }
+    </script>
     
 </body>
 </html>
