@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050506">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>THE BLOCK | Character Deck</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #050506;
+            --bg-cosmos: #0a0a0b;
+            --bg-nebula: #0f0f12;
+            --bg-stardust: #161619;
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.06);
+            --lux-gold: #f59e0b;
+            --lux-amber: #fbbf24;
+            --lux-violet: #8b5cf6;
+            --lux-rose: #f43f5e;
+            --lux-cyan: #06b6d4;
+            --lux-emerald: #10b981;
+            --text-bright: #ffffff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+        
+        body.zen-theme {
+            --bg-void: #f5f1eb;
+            --bg-cosmos: #ebe6dc;
+            --bg-nebula: #e0d9cc;
+            --bg-stardust: #d4cdbf;
+            --bg-glass: rgba(0, 0, 0, 0.03);
+            --bg-glass-hover: rgba(0, 0, 0, 0.06);
+            --lux-gold: #5d7a5d;
+            --lux-violet: #6b5b7a;
+            --lux-rose: #8a5a5a;
+            --text-bright: #2c2c2c;
+            --text-primary: #3d3d3d;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            --glass-border: rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-cosmos);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-back:hover {
+            background: var(--bg-glass);
+            color: var(--lux-gold);
+        }
+        
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-add {
+            padding: 8px 16px;
+            background: var(--lux-rose);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Intro */
+        .intro-card {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.1), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(244, 63, 94, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .intro-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        
+        .intro-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--lux-rose);
+            margin-bottom: 8px;
+        }
+        
+        .intro-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Character Grid */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        
+        /* Character Card */
+        .character-card {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card:hover {
+            border-color: var(--lux-rose);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--lux-rose), var(--lux-violet));
+        }
+        
+        .character-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+        
+        .character-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 4px;
+        }
+        
+        .character-role {
+            font-size: 0.8rem;
+            color: var(--lux-rose);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+        
+        .character-tagline {
+            font-family: 'Merriweather', serif;
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        
+        .character-traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .trait {
+            padding: 4px 10px;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 8px;
+        }
+        
+        .empty-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .empty-btn {
+            padding: 12px 24px;
+            background: var(--lux-rose);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-stardust);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--lux-rose);
+        }
+        
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+            font-family: 'Merriweather', serif;
+            line-height: 1.6;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .avatar-picker {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .avatar-option {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: var(--bg-stardust);
+            transition: all 0.2s;
+        }
+        
+        .avatar-option:hover {
+            border-color: var(--lux-rose);
+        }
+        
+        .avatar-option.selected {
+            border-color: var(--lux-rose);
+            background: rgba(244, 63, 94, 0.1);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .modal-btn.primary {
+            background: var(--lux-rose);
+            border: none;
+            color: white;
+        }
+        
+        .modal-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+        }
+        
+        .modal-btn.danger {
+            background: transparent;
+            border: 1px solid var(--lux-rose);
+            color: var(--lux-rose);
+            flex: 0;
+            padding: 12px 16px;
+        }
+        
+        .modal-btn.ai {
+            background: linear-gradient(135deg, var(--lux-violet), var(--lux-gold));
+            border: none;
+            color: white;
+        }
+        
+        /* View Modal */
+        .view-section {
+            margin-bottom: 20px;
+        }
+        
+        .view-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--lux-rose);
+            margin-bottom: 8px;
+        }
+        
+        .view-content {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .view-traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="btn-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+        </a>
+        <h1 class="header-title">👥 Character Deck</h1>
+        <div class="header-actions">
+            <button class="btn-add" onclick="openCreateModal()">+ New</button>
+        </div>
+    </header>
+    
+    <!-- Container -->
+    <div class="container">
+        
+        <!-- Intro -->
+        <div class="intro-card">
+            <div class="intro-icon">👥</div>
+            <div class="intro-title">Bring Characters to Life</div>
+            <div class="intro-desc">
+                Create rich character profiles with personalities, backstories, and motivations. Your cast awaits!
+            </div>
+        </div>
+        
+        <!-- Character Grid -->
+        <div class="character-grid" id="characterGrid">
+            <!-- Characters inserted here -->
+        </div>
+        
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">🎭</div>
+            <div class="empty-title">No Characters Yet</div>
+            <div class="empty-desc">Create your first character and watch your story come alive</div>
+            <button class="empty-btn" onclick="openCreateModal()">+ Create Character</button>
+        </div>
+    </div>
+    
+    <!-- Create/Edit Modal -->
+    <div class="modal" id="editModal" onclick="closeModal('editModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">New Character</h2>
+                <button class="modal-close" onclick="closeModal('editModal')">×</button>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Avatar</label>
+                <div class="avatar-picker" id="avatarPicker">
+                    <div class="avatar-option selected" data-avatar="👤">👤</div>
+                    <div class="avatar-option" data-avatar="👩">👩</div>
+                    <div class="avatar-option" data-avatar="👨">👨</div>
+                    <div class="avatar-option" data-avatar="👧">👧</div>
+                    <div class="avatar-option" data-avatar="👦">👦</div>
+                    <div class="avatar-option" data-avatar="🧙">🧙</div>
+                    <div class="avatar-option" data-avatar="🧝">🧝</div>
+                    <div class="avatar-option" data-avatar="🧛">🧛</div>
+                    <div class="avatar-option" data-avatar="🦸">🦸</div>
+                    <div class="avatar-option" data-avatar="🧟">🧟</div>
+                    <div class="avatar-option" data-avatar="👽">👽</div>
+                    <div class="avatar-option" data-avatar="🤖">🤖</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Name *</label>
+                    <input type="text" class="form-input" id="charName" placeholder="Character name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-input" id="charRole">
+                        <option value="Protagonist">Protagonist</option>
+                        <option value="Antagonist">Antagonist</option>
+                        <option value="Love Interest">Love Interest</option>
+                        <option value="Mentor">Mentor</option>
+                        <option value="Sidekick">Sidekick</option>
+                        <option value="Supporting">Supporting</option>
+                        <option value="Minor">Minor</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Tagline / Quote</label>
+                <input type="text" class="form-input" id="charTagline" placeholder="A defining quote or description">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Personality Traits (comma separated)</label>
+                <input type="text" class="form-input" id="charTraits" placeholder="e.g., brave, stubborn, loyal">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Backstory</label>
+                <textarea class="form-input form-textarea" id="charBackstory" placeholder="Where do they come from? What shaped them?"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Motivation / Goal</label>
+                <textarea class="form-input form-textarea" id="charMotivation" placeholder="What do they want? What drives them?"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Flaw / Weakness</label>
+                <input type="text" class="form-input" id="charFlaw" placeholder="Every great character has a flaw">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Notes</label>
+                <textarea class="form-input form-textarea" id="charNotes" placeholder="Any other details..."></textarea>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn danger" id="deleteBtn" onclick="deleteCharacter()" style="display: none;">🗑️</button>
+                <button class="modal-btn ai" onclick="generateWithAI()">✨ AI Generate</button>
+                <button class="modal-btn primary" onclick="saveCharacter()">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- View Modal -->
+    <div class="modal" id="viewModal" onclick="closeModal('viewModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title" id="viewName">Character Name</h2>
+                <button class="modal-close" onclick="closeModal('viewModal')">×</button>
+            </div>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div class="character-avatar" id="viewAvatar" style="margin: 0 auto; font-size: 3rem;">👤</div>
+                <div class="character-role" id="viewRole">PROTAGONIST</div>
+            </div>
+            
+            <div class="view-section">
+                <div class="view-label">Tagline</div>
+                <div class="view-content" id="viewTagline" style="font-style: italic;">-</div>
+            </div>
+            
+            <div class="view-section">
+                <div class="view-label">Traits</div>
+                <div class="view-traits" id="viewTraits"></div>
+            </div>
+            
+            <div class="view-section">
+                <div class="view-label">Backstory</div>
+                <div class="view-content" id="viewBackstory">-</div>
+            </div>
+            
+            <div class="view-section">
+                <div class="view-label">Motivation</div>
+                <div class="view-content" id="viewMotivation">-</div>
+            </div>
+            
+            <div class="view-section">
+                <div class="view-label">Flaw</div>
+                <div class="view-content" id="viewFlaw">-</div>
+            </div>
+            
+            <div class="view-section" id="viewNotesSection">
+                <div class="view-label">Notes</div>
+                <div class="view-content" id="viewNotes">-</div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeModal('viewModal')">Close</button>
+                <button class="modal-btn primary" onclick="editFromView()">Edit</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let characters = [];
+        let editingId = null;
+        let selectedAvatar = '👤';
+        let viewingId = null;
+        
+        // Load characters
+        function loadCharacters() {
+            characters = JSON.parse(localStorage.getItem('theblock_characters') || '[]');
+            renderCharacters();
+        }
+        
+        // Render characters
+        function renderCharacters() {
+            const grid = document.getElementById('characterGrid');
+            const empty = document.getElementById('emptyState');
+            
+            if (characters.length === 0) {
+                grid.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            empty.style.display = 'none';
+            
+            grid.innerHTML = characters.map(char => `
+                <div class="character-card" onclick="viewCharacter('${char.id}')">
+                    <div class="character-avatar">${char.avatar || '👤'}</div>
+                    <div class="character-name">${char.name}</div>
+                    <div class="character-role">${char.role || 'Character'}</div>
+                    <div class="character-tagline">${char.tagline || 'No tagline yet...'}</div>
+                    <div class="character-traits">
+                        ${(char.traits || []).slice(0, 4).map(t => `<span class="trait">${t}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Avatar picker
+        document.getElementById('avatarPicker').addEventListener('click', (e) => {
+            const option = e.target.closest('.avatar-option');
+            if (!option) return;
+            
+            document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            selectedAvatar = option.dataset.avatar;
+        });
+        
+        // Open create modal
+        function openCreateModal() {
+            editingId = null;
+            selectedAvatar = '👤';
+            document.getElementById('modalTitle').textContent = 'New Character';
+            document.getElementById('charName').value = '';
+            document.getElementById('charRole').value = 'Protagonist';
+            document.getElementById('charTagline').value = '';
+            document.getElementById('charTraits').value = '';
+            document.getElementById('charBackstory').value = '';
+            document.getElementById('charMotivation').value = '';
+            document.getElementById('charFlaw').value = '';
+            document.getElementById('charNotes').value = '';
+            document.getElementById('deleteBtn').style.display = 'none';
+            
+            document.querySelectorAll('.avatar-option').forEach(o => {
+                o.classList.toggle('selected', o.dataset.avatar === '👤');
+            });
+            
+            document.getElementById('editModal').classList.add('open');
+        }
+        
+        // View character
+        function viewCharacter(id) {
+            const char = characters.find(c => c.id === id);
+            if (!char) return;
+            
+            viewingId = id;
+            
+            document.getElementById('viewName').textContent = char.name;
+            document.getElementById('viewAvatar').textContent = char.avatar || '👤';
+            document.getElementById('viewRole').textContent = char.role || 'CHARACTER';
+            document.getElementById('viewTagline').textContent = char.tagline || '-';
+            document.getElementById('viewBackstory').textContent = char.backstory || '-';
+            document.getElementById('viewMotivation').textContent = char.motivation || '-';
+            document.getElementById('viewFlaw').textContent = char.flaw || '-';
+            document.getElementById('viewNotes').textContent = char.notes || '-';
+            document.getElementById('viewNotesSection').style.display = char.notes ? 'block' : 'none';
+            
+            const traitsContainer = document.getElementById('viewTraits');
+            traitsContainer.innerHTML = (char.traits || []).map(t => `<span class="trait">${t}</span>`).join('') || '<span style="color: var(--text-muted);">No traits defined</span>';
+            
+            document.getElementById('viewModal').classList.add('open');
+        }
+        
+        // Edit from view
+        function editFromView() {
+            closeModal('viewModal');
+            
+            const char = characters.find(c => c.id === viewingId);
+            if (!char) return;
+            
+            editingId = viewingId;
+            selectedAvatar = char.avatar || '👤';
+            
+            document.getElementById('modalTitle').textContent = 'Edit Character';
+            document.getElementById('charName').value = char.name || '';
+            document.getElementById('charRole').value = char.role || 'Protagonist';
+            document.getElementById('charTagline').value = char.tagline || '';
+            document.getElementById('charTraits').value = (char.traits || []).join(', ');
+            document.getElementById('charBackstory').value = char.backstory || '';
+            document.getElementById('charMotivation').value = char.motivation || '';
+            document.getElementById('charFlaw').value = char.flaw || '';
+            document.getElementById('charNotes').value = char.notes || '';
+            document.getElementById('deleteBtn').style.display = 'block';
+            
+            document.querySelectorAll('.avatar-option').forEach(o => {
+                o.classList.toggle('selected', o.dataset.avatar === selectedAvatar);
+            });
+            
+            document.getElementById('editModal').classList.add('open');
+        }
+        
+        // Save character
+        function saveCharacter() {
+            const name = document.getElementById('charName').value.trim();
+            if (!name) {
+                alert('Please enter a character name');
+                return;
+            }
+            
+            const charData = {
+                id: editingId || 'char_' + Date.now(),
+                avatar: selectedAvatar,
+                name: name,
+                role: document.getElementById('charRole').value,
+                tagline: document.getElementById('charTagline').value.trim(),
+                traits: document.getElementById('charTraits').value.split(',').map(t => t.trim()).filter(t => t),
+                backstory: document.getElementById('charBackstory').value.trim(),
+                motivation: document.getElementById('charMotivation').value.trim(),
+                flaw: document.getElementById('charFlaw').value.trim(),
+                notes: document.getElementById('charNotes').value.trim(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            if (editingId) {
+                const index = characters.findIndex(c => c.id === editingId);
+                if (index !== -1) characters[index] = charData;
+            } else {
+                charData.createdAt = new Date().toISOString();
+                characters.push(charData);
+            }
+            
+            localStorage.setItem('theblock_characters', JSON.stringify(characters));
+            closeModal('editModal');
+            renderCharacters();
+        }
+        
+        // Delete character
+        function deleteCharacter() {
+            if (!confirm('Delete this character? This cannot be undone.')) return;
+            
+            characters = characters.filter(c => c.id !== editingId);
+            localStorage.setItem('theblock_characters', JSON.stringify(characters));
+            closeModal('editModal');
+            renderCharacters();
+        }
+        
+        // Generate with AI
+        async function generateWithAI() {
+            const name = document.getElementById('charName').value.trim() || 'unnamed character';
+            const role = document.getElementById('charRole').value;
+            
+            const btn = event.target;
+            btn.textContent = '✨ Generating...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/.netlify/functions/muse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: `Create a compelling ${role.toLowerCase()} character${name !== 'unnamed character' ? ` named ${name}` : ''}. Provide:
+1. A memorable tagline/quote (1 sentence)
+2. 4 personality traits (comma separated)
+3. Brief backstory (2-3 sentences)
+4. Core motivation (1-2 sentences)
+5. A significant flaw (1 sentence)
+
+Format as:
+TAGLINE: ...
+TRAITS: ...
+BACKSTORY: ...
+MOTIVATION: ...
+FLAW: ...`,
+                        type: 'character',
+                        model: 'claude'
+                    })
+                });
+                
+                const data = await response.json();
+                const text = data.response || '';
+                
+                // Parse response
+                const tagline = text.match(/TAGLINE:\s*(.+)/i)?.[1] || '';
+                const traits = text.match(/TRAITS:\s*(.+)/i)?.[1] || '';
+                const backstory = text.match(/BACKSTORY:\s*(.+)/i)?.[1] || '';
+                const motivation = text.match(/MOTIVATION:\s*(.+)/i)?.[1] || '';
+                const flaw = text.match(/FLAW:\s*(.+)/i)?.[1] || '';
+                
+                document.getElementById('charTagline').value = tagline.trim();
+                document.getElementById('charTraits').value = traits.trim();
+                document.getElementById('charBackstory').value = backstory.trim();
+                document.getElementById('charMotivation').value = motivation.trim();
+                document.getElementById('charFlaw').value = flaw.trim();
+                
+            } catch (error) {
+                alert('AI generation failed. Please try again.');
+            }
+            
+            btn.textContent = '✨ AI Generate';
+            btn.disabled = false;
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('open');
+        }
+        
+        // Load theme
+        const savedTheme = localStorage.getItem('theblock_theme');
+        if (savedTheme === 'zen') {
+            document.body.classList.add('zen-theme');
+        }
+        
+        // Initialize
+        loadCharacters();
+    </script>
+</body>
+</html>
