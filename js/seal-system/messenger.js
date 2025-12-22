@@ -1,4 +1,4 @@
-// FILE 2: messenger.js
+// FILE 2: messenger.js (FIXED)
 // Messenger UI for sending manuscripts
 
 class Messenger {
@@ -105,18 +105,64 @@ class Messenger {
 
     const readLink = `${window.location.origin}/read.html?token=${share.token}`;
 
-    // Close dialog
-    document.getElementById('messengerModal').remove();
+    const emailHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2>📖 Manuscript Shared</h2>
+        <p>Hi ${agentName},</p>
+        <p><strong>${authorName}</strong> has shared a manuscript with you via <strong>The Writers Block</strong>.</p>
+        <div style="background: #f5f5f5; padding: 20px; border-left: 4px solid #6366f1; margin: 20px 0;">
+          <h3 style="margin: 0 0 10px 0;">${projectTitle}</h3>
+          <p style="margin: 5px 0;"><strong>Author:</strong> ${authorName}</p>
+          <p style="margin: 5px 0;"><strong>Agency:</strong> ${agencyName}</p>
+        </div>
+        <h3>Author's Message:</h3>
+        <blockquote style="background: #f9f9f9; padding: 15px; border-left: 3px solid #ccc; margin: 15px 0;">
+          ${message.replace(/\n/g, '<br>')}
+        </blockquote>
+        <p style="text-align: center; margin: 30px 0;">
+          <a href="${readLink}" style="display: inline-block; padding: 12px 30px; background: #6366f1; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            📖 VIEW MANUSCRIPT
+          </a>
+        </p>
+        <p style="color: #666; font-size: 12px;">
+          This is a secure manuscript share. Only you can view it with this link.
+        </p>
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+        <p style="color: #999; font-size: 11px;">
+          The Writers Block | Empowering Authors with Security and Control
+        </p>
+      </div>
+    `;
 
-    // Show success
-    alert(`✅ Manuscript sent to ${agentEmail}! Check your dashboard for tracking updates.`);
+    try {
+      const response = await fetch('/.netlify/functions/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: agentEmail,
+          subject: `${authorName} sent you a manuscript - ${projectTitle}`,
+          html: emailHtml,
+        }),
+      });
 
-    // Log event
-    console.log('Manuscript sent:', {
-      to: agentEmail,
-      manuscript: projectTitle,
-      link: readLink
-    });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send email');
+      }
+
+      document.getElementById('messengerModal').remove();
+      alert(`✅ Email sent to ${agentEmail}!\n\nManuscript is being tracked!`);
+
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 1500);
+
+    } catch (error) {
+      alert(`❌ Error: ${error.message}\n\nBut manuscript is sealed!`);
+      console.error('Send error:', error);
+      document.getElementById('messengerModal').remove();
+    }
   }
 }
 
