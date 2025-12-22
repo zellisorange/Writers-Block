@@ -217,11 +217,51 @@
         
     </div>
     
- <!-- Supabase Library -->
+<!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <!-- Supabase Connection -->
-    <script src="js/supabase.js"></script>
+    <script>
+        // Wait for Supabase to load, then initialize
+        const SUPABASE_URL = 'https://wwzhafvlqejccrskvwhb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3emhhZnZscWVqY2Nyc2t2d2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyOTk0MzgsImV4cCI6MjA4MTg3NTQzOH0.ajBE95GUoGNHmWiJ7WMFj0StVRrLd6Rp58I0sEh55pQ';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Auth functions
+        window.SupabaseAuth = {
+            signUp: async (email, password, name) => {
+                const { data, error } = await supabase.auth.signUp({
+                    email, password,
+                    options: { data: { name, tier: 'free' } }
+                });
+                if (error) throw error;
+                return data;
+            },
+            signIn: async (email, password) => {
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+                return data;
+            },
+            signOut: async () => {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                return true;
+            },
+            getUser: async () => {
+                const { data: { user } } = await supabase.auth.getUser();
+                return user;
+            },
+            resetPassword: async (email) => {
+                const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+                if (error) throw error;
+                return data;
+            },
+            client: supabase
+        };
+        
+        console.log('✦ Supabase ready');
+    </script>
     
     <!-- Auth Script -->
     <script src="js/auth.js"></script>
