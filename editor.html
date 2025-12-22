@@ -23,6 +23,74 @@
            ===================================================== */
         
         :root {
+
+
+            /* =====================================================
+           ZEN MODE - Forest Light Theme
+           ===================================================== */
+        
+        body.zen-theme {
+            --bg-void: #f5f1eb;
+            --bg-cosmos: #ebe6dc;
+            --bg-nebula: #e0d9cc;
+            --bg-stardust: #d4cdbf;
+            --bg-paper: #faf8f5;
+            --bg-glass: rgba(0, 0, 0, 0.03);
+            --bg-glass-hover: rgba(0, 0, 0, 0.06);
+            
+            /* Forest Accent Colors */
+            --lux-gold: #5d7a5d;
+            --lux-amber: #7a956e;
+            --lux-rose: #a67c6b;
+            --lux-violet: #8b7e7a;
+            --lux-cyan: #6b8a8a;
+            --lux-emerald: #5d7a5d;
+            
+            /* Text */
+            --text-bright: #2c2c2c;
+            --text-primary: #3d3d3d;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            --text-writing: #3d3d3d;
+            
+            /* Glass Effects */
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-glow: rgba(93, 122, 93, 0.15);
+        }
+        
+        body.zen-theme .cosmic-bg {
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(93, 122, 93, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(166, 124, 107, 0.06) 0%, transparent 50%),
+                #f5f1eb;
+        }
+        
+        body.zen-theme .writing-textarea::placeholder {
+            color: #a0a0a0;
+        }
+        
+        body.zen-theme .btn-icon.active {
+            background: rgba(93, 122, 93, 0.15);
+            color: var(--lux-gold);
+            border-color: var(--lux-gold);
+        }
+        
+        body.zen-theme .realm-indicator {
+            background: rgba(93, 122, 93, 0.1);
+            border-color: rgba(93, 122, 93, 0.3);
+            color: var(--lux-gold);
+        }
+        
+        body.zen-theme .ai-muse-btn {
+            background: linear-gradient(135deg, rgba(93, 122, 93, 0.15), rgba(166, 124, 107, 0.15));
+            color: #5d7a5d;
+        }
+        
+        body.zen-theme .ai-muse-btn:hover {
+            background: linear-gradient(135deg, rgba(93, 122, 93, 0.25), rgba(166, 124, 107, 0.25));
+            border-color: #5d7a5d;
+        }
+
             /* Cosmic Color System */
             --bg-void: #050506;
             --bg-cosmos: #0a0a0b;
@@ -951,11 +1019,22 @@ The first draft is just you telling yourself the story."
                 autoSave();
             });
             
-            // Zen mode
+        // Zen mode toggle (switches theme)
             DOM.zenModeBtn.addEventListener('click', () => {
-                document.body.classList.toggle('zen-mode');
+                document.body.classList.toggle('zen-theme');
                 DOM.zenModeBtn.classList.toggle('active');
+                
+                // Save preference
+                const isZen = document.body.classList.contains('zen-theme');
+                localStorage.setItem('theblock_theme', isZen ? 'zen' : 'midnight');
             });
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theblock_theme');
+            if (savedTheme === 'zen') {
+                document.body.classList.add('zen-theme');
+                DOM.zenModeBtn.classList.add('active');
+            }
             
             // Add chapter
             DOM.addChapter.addEventListener('click', () => {
@@ -1000,9 +1079,7 @@ The first draft is just you telling yourself the story."
             });
             
 // AI Muse button
-            DOM.aiMuseBtn.addEventListener('click', () => {
-                openMuseModal();
-            });
+            document.getElementById('aiMuseBtn').onclick = openMuseModal;
             
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {

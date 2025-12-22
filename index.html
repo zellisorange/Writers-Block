@@ -23,6 +23,87 @@
            ===================================================== */
         
         :root {
+
+
+            /* =====================================================
+           ZEN MODE - Forest Light Theme
+           ===================================================== */
+        
+        body.zen-theme {
+            --bg-void: #f5f1eb;
+            --bg-cosmos: #ebe6dc;
+            --bg-nebula: #e0d9cc;
+            --bg-stardust: #d4cdbf;
+            --bg-glass: rgba(0, 0, 0, 0.03);
+            --bg-glass-hover: rgba(0, 0, 0, 0.06);
+            
+            /* Forest Accent Colors */
+            --lux-gold: #5d7a5d;
+            --lux-amber: #7a956e;
+            --lux-rose: #a67c6b;
+            --lux-violet: #8b7e7a;
+            --lux-cyan: #6b8a8a;
+            --lux-emerald: #5d7a5d;
+            
+            /* Text */
+            --text-bright: #2c2c2c;
+            --text-primary: #3d3d3d;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            
+            /* Glass Effects */
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-glow: rgba(93, 122, 93, 0.15);
+        }
+        
+        body.zen-theme .cosmic-bg {
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(93, 122, 93, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(166, 124, 107, 0.06) 0%, transparent 50%),
+                #f5f1eb;
+        }
+        
+        body.zen-theme .stat-card:hover {
+            border-color: #5d7a5d;
+            box-shadow: 0 0 30px rgba(93, 122, 93, 0.15);
+        }
+        
+        body.zen-theme .action-card:hover {
+            border-color: #5d7a5d;
+        }
+        
+        body.zen-theme .tool-item.active {
+            background: rgba(93, 122, 93, 0.1);
+            color: #5d7a5d;
+        }
+        
+        body.zen-theme .tool-item:hover {
+            color: #5d7a5d;
+        }
+        
+        body.zen-theme .tool-badge {
+            background: #5d7a5d;
+        }
+        
+        body.zen-theme .toggle.active {
+            background: #5d7a5d;
+        }
+        
+        body.zen-theme .passport-tier {
+            color: #5d7a5d;
+        }
+        
+        body.zen-theme .welcome-title strong {
+            background: linear-gradient(135deg, #5d7a5d, #7a956e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        body.zen-theme .biglove-text span {
+            color: #a67c6b;
+        }
+
             /* Cosmic Color System */
             --bg-void: #050506;
             --bg-cosmos: #0a0a0b;
@@ -991,11 +1072,23 @@
                 window.location.href = 'editor.html?new=true';
             });
             
-            // Zen toggle
+        // Zen toggle (switches theme)
             const zenToggle = document.getElementById('zenToggle');
             zenToggle?.addEventListener('click', () => {
                 zenToggle.classList.toggle('active');
+                document.body.classList.toggle('zen-theme');
+                
+                // Save preference
+                const isZen = document.body.classList.contains('zen-theme');
+                localStorage.setItem('theblock_theme', isZen ? 'zen' : 'midnight');
             });
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theblock_theme');
+            if (savedTheme === 'zen') {
+                document.body.classList.add('zen-theme');
+                zenToggle?.classList.add('active');
+            }
             
             // Logout
             const logoutBtn = document.getElementById('logoutBtn');
