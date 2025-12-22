@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050506">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>THE BLOCK | The Loom</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #050506;
+            --bg-cosmos: #0a0a0b;
+            --bg-nebula: #0f0f12;
+            --bg-stardust: #161619;
+            --bg-glass: rgba(255, 255, 255, 0.03);
+            --bg-glass-hover: rgba(255, 255, 255, 0.06);
+            --lux-gold: #f59e0b;
+            --lux-amber: #fbbf24;
+            --lux-violet: #8b5cf6;
+            --lux-rose: #f43f5e;
+            --lux-cyan: #06b6d4;
+            --lux-emerald: #10b981;
+            --text-bright: #ffffff;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #52525b;
+            --glass-border: rgba(255, 255, 255, 0.06);
+        }
+        
+        body.zen-theme {
+            --bg-void: #f5f1eb;
+            --bg-cosmos: #ebe6dc;
+            --bg-nebula: #e0d9cc;
+            --bg-stardust: #d4cdbf;
+            --bg-glass: rgba(0, 0, 0, 0.03);
+            --bg-glass-hover: rgba(0, 0, 0, 0.06);
+            --lux-gold: #5d7a5d;
+            --lux-violet: #6b5b7a;
+            --lux-cyan: #4a7a7a;
+            --lux-emerald: #5d7a5d;
+            --text-bright: #2c2c2c;
+            --text-primary: #3d3d3d;
+            --text-secondary: #5a5a5a;
+            --text-muted: #8a8a8a;
+            --glass-border: rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-void);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-cosmos);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-back:hover {
+            background: var(--bg-glass);
+            color: var(--lux-gold);
+        }
+        
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-icon {
+            padding: 8px 12px;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-icon:hover {
+            background: var(--lux-gold);
+            color: var(--bg-void);
+        }
+        
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Intro */
+        .intro-card {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .intro-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        
+        .intro-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--lux-cyan);
+            margin-bottom: 8px;
+        }
+        
+        .intro-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        /* Project Selector */
+        .project-selector {
+            margin-bottom: 24px;
+        }
+        
+        .selector-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .selector-dropdown {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        
+        .selector-dropdown:focus {
+            outline: none;
+            border-color: var(--lux-cyan);
+        }
+        
+        /* Beat Sheet Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        
+        .tab {
+            padding: 10px 16px;
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            background: var(--lux-cyan);
+            border-color: var(--lux-cyan);
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            border-color: var(--lux-cyan);
+            color: var(--lux-cyan);
+        }
+        
+        /* Beat Cards */
+        .beats-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .beat-card {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .beat-card:hover {
+            border-color: var(--lux-cyan);
+        }
+        
+        .beat-card.completed {
+            border-left: 3px solid var(--lux-emerald);
+        }
+        
+        .beat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .beat-number {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--lux-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .beat-percent {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .beat-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+            margin-bottom: 6px;
+        }
+        
+        .beat-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .beat-content {
+            background: var(--bg-stardust);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            min-height: 60px;
+        }
+        
+        .beat-content:empty::before {
+            content: 'Click to add your story beat...';
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .beat-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .beat-btn {
+            padding: 8px 12px;
+            background: var(--bg-glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .beat-btn:hover {
+            border-color: var(--lux-cyan);
+            color: var(--lux-cyan);
+        }
+        
+        .beat-btn.complete {
+            background: var(--lux-emerald);
+            border-color: var(--lux-emerald);
+            color: white;
+        }
+        
+        /* Progress Bar */
+        .progress-section {
+            margin-bottom: 24px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .progress-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .progress-value {
+            font-size: 0.85rem;
+            color: var(--lux-cyan);
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-stardust);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--lux-cyan), var(--lux-violet));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: var(--bg-nebula);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+        
+        .modal-subtitle {
+            font-size: 0.8rem;
+            color: var(--lux-cyan);
+            margin-top: 4px;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            padding: 12px;
+            background: var(--bg-glass);
+            border-radius: 8px;
+        }
+        
+        .modal-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            background: var(--bg-stardust);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            resize: vertical;
+            margin-bottom: 16px;
+        }
+        
+        .modal-textarea:focus {
+            outline: none;
+            border-color: var(--lux-cyan);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .modal-btn.primary {
+            background: var(--lux-cyan);
+            border: none;
+            color: white;
+        }
+        
+        .modal-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+        }
+        
+        .modal-btn.ai {
+            background: linear-gradient(135deg, var(--lux-violet), var(--lux-gold));
+            border: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="btn-back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+        </a>
+        <h1 class="header-title">🧵 The Loom</h1>
+        <div class="header-actions">
+            <button class="btn-icon" onclick="exportBeats()">📤</button>
+        </div>
+    </header>
+    
+    <!-- Container -->
+    <div class="container">
+        
+        <!-- Intro -->
+        <div class="intro-card">
+            <div class="intro-icon">🧵</div>
+            <div class="intro-title">Weave Your Story</div>
+            <div class="intro-desc">
+                Structure your narrative with proven beat sheets. Plan your plot, track your progress, and never lose sight of your story's arc.
+            </div>
+        </div>
+        
+        <!-- Project Selector -->
+        <div class="project-selector">
+            <div class="selector-label">Select Project</div>
+            <select class="selector-dropdown" id="projectSelect" onchange="loadProjectBeats()">
+                <option value="">-- Choose a project --</option>
+            </select>
+        </div>
+        
+        <!-- Progress -->
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="progress-header">
+                <span class="progress-label">Story Progress</span>
+                <span class="progress-value" id="progressValue">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <!-- Beat Sheet Tabs -->
+        <div class="tabs" id="tabs" style="display: none;">
+            <button class="tab active" onclick="setStructure('savecat')">Save the Cat</button>
+            <button class="tab" onclick="setStructure('3act')">3-Act</button>
+            <button class="tab" onclick="setStructure('hero')">Hero's Journey</button>
+            <button class="tab" onclick="setStructure('7point')">7-Point</button>
+        </div>
+        
+        <!-- Beats Container -->
+        <div class="beats-container" id="beatsContainer">
+            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                Select a project to start plotting your story
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title" id="modalBeatTitle">Beat Title</div>
+                    <div class="modal-subtitle" id="modalBeatNumber">Beat 1 • 0-10%</div>
+                </div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-desc" id="modalBeatDesc">Beat description...</div>
+            <textarea class="modal-textarea" id="modalTextarea" placeholder="Write your story beat here..."></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn ai" onclick="getAIHelp()">✨ AI Help</button>
+                <button class="modal-btn primary" onclick="saveBeat()">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStructure = 'savecat';
+        let currentProject = null;
+        let currentBeatIndex = null;
+        
+        // Beat structures
+        const structures = {
+            savecat: [
+                { title: 'Opening Image', desc: 'A snapshot of your protagonist\'s world before the adventure begins.', percent: '0-1%' },
+                { title: 'Theme Stated', desc: 'Someone states the theme/lesson the hero will learn (they don\'t get it yet).', percent: '5%' },
+                { title: 'Setup', desc: 'Establish the hero\'s world, flaws, and what\'s missing in their life.', percent: '1-10%' },
+                { title: 'Catalyst', desc: 'Something happens that changes everything. The call to adventure.', percent: '10%' },
+                { title: 'Debate', desc: 'The hero resists the call. Should I go? Can I do this?', percent: '10-20%' },
+                { title: 'Break into Two', desc: 'The hero decides to act and enters a new world/situation.', percent: '20%' },
+                { title: 'B Story', desc: 'A subplot begins, often a love story or friendship that teaches theme.', percent: '22%' },
+                { title: 'Fun and Games', desc: 'The promise of the premise. Why we came to see this story.', percent: '20-50%' },
+                { title: 'Midpoint', desc: 'A major twist—false victory or false defeat. Stakes are raised.', percent: '50%' },
+                { title: 'Bad Guys Close In', desc: 'External pressure mounts, internal flaws resurface.', percent: '50-75%' },
+                { title: 'All Is Lost', desc: 'The lowest point. Something or someone "dies."', percent: '75%' },
+                { title: 'Dark Night of the Soul', desc: 'Hero mourns, reflects, and finds inner strength.', percent: '75-80%' },
+                { title: 'Break into Three', desc: 'The solution is found! Hero knows what to do.', percent: '80%' },
+                { title: 'Finale', desc: 'Hero confronts the bad guys, applies lessons learned, wins.', percent: '80-99%' },
+                { title: 'Final Image', desc: 'Mirror of opening—shows how the hero has changed.', percent: '100%' }
+            ],
+            '3act': [
+                { title: 'Act 1: Setup', desc: 'Introduce protagonist, world, and the inciting incident.', percent: '0-25%' },
+                { title: 'Plot Point 1', desc: 'The event that pushes the hero into Act 2.', percent: '25%' },
+                { title: 'Act 2A: Rising Action', desc: 'Hero pursues goal, faces obstacles, makes progress.', percent: '25-50%' },
+                { title: 'Midpoint', desc: 'Major revelation or reversal. Stakes change dramatically.', percent: '50%' },
+                { title: 'Act 2B: Complications', desc: 'Things get worse. Enemies close in. Internal conflicts peak.', percent: '50-75%' },
+                { title: 'Plot Point 2', desc: 'The crisis that leads to the climax.', percent: '75%' },
+                { title: 'Act 3: Climax', desc: 'The final confrontation. Hero faces their greatest challenge.', percent: '75-90%' },
+                { title: 'Resolution', desc: 'The new normal. How has the world/hero changed?', percent: '90-100%' }
+            ],
+            hero: [
+                { title: 'Ordinary World', desc: 'The hero\'s normal life before the adventure.', percent: '0-10%' },
+                { title: 'Call to Adventure', desc: 'The hero is presented with a challenge or quest.', percent: '10%' },
+                { title: 'Refusal of the Call', desc: 'The hero hesitates or refuses the challenge.', percent: '15%' },
+                { title: 'Meeting the Mentor', desc: 'A wise figure provides guidance, training, or gifts.', percent: '20%' },
+                { title: 'Crossing the Threshold', desc: 'The hero commits to the adventure and enters the special world.', percent: '25%' },
+                { title: 'Tests, Allies, Enemies', desc: 'The hero faces challenges and meets friends and foes.', percent: '30-50%' },
+                { title: 'Approach to the Inmost Cave', desc: 'The hero prepares for the major challenge ahead.', percent: '50%' },
+                { title: 'The Ordeal', desc: 'The hero faces their greatest fear or enemy.', percent: '60%' },
+                { title: 'Reward', desc: 'The hero gains what they sought (object, knowledge, power).', percent: '70%' },
+                { title: 'The Road Back', desc: 'The hero begins the journey home, but faces consequences.', percent: '80%' },
+                { title: 'Resurrection', desc: 'A final test where the hero must use everything learned.', percent: '90%' },
+                { title: 'Return with the Elixir', desc: 'The hero returns transformed, bringing benefit to the ordinary world.', percent: '100%' }
+            ],
+            '7point': [
+                { title: 'Hook', desc: 'The opposite state of the resolution. Where does your character start?', percent: '0%' },
+                { title: 'Plot Turn 1', desc: 'The event that sets the story in motion. Introduction of conflict.', percent: '15%' },
+                { title: 'Pinch Point 1', desc: 'Apply pressure. Show the antagonist\'s power and the stakes.', percent: '35%' },
+                { title: 'Midpoint', desc: 'The character moves from reaction to action. A major shift.', percent: '50%' },
+                { title: 'Pinch Point 2', desc: 'More pressure. The situation seems hopeless.', percent: '65%' },
+                { title: 'Plot Turn 2', desc: 'The final piece falls into place. The hero has what they need.', percent: '85%' },
+                { title: 'Resolution', desc: 'The opposite of the hook. The character has transformed.', percent: '100%' }
+            ]
+        };
+        
+        // Load projects
+        function loadProjects() {
+            const projects = JSON.parse(localStorage.getItem('theblock_projects') || '[]');
+            const select = document.getElementById('projectSelect');
+            
+            select.innerHTML = '<option value="">-- Choose a project --</option>';
+            projects.forEach(p => {
+                select.innerHTML += `<option value="${p.id}">${p.title || 'Untitled'}</option>`;
+            });
+        }
+        
+        // Load project beats
+        function loadProjectBeats() {
+            const projectId = document.getElementById('projectSelect').value;
+            
+            if (!projectId) {
+                document.getElementById('beatsContainer').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        Select a project to start plotting your story
+                    </div>
+                `;
+                document.getElementById('tabs').style.display = 'none';
+                document.getElementById('progressSection').style.display = 'none';
+                return;
+            }
+            
+            currentProject = projectId;
+            document.getElementById('tabs').style.display = 'flex';
+            document.getElementById('progressSection').style.display = 'block';
+            renderBeats();
+        }
+        
+        // Set structure
+        function setStructure(structure) {
+            currentStructure = structure;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderBeats();
+        }
+        
+        // Render beats
+        function renderBeats() {
+            const beats = structures[currentStructure];
+            const savedBeats = JSON.parse(localStorage.getItem(`theblock_loom_${currentProject}_${currentStructure}`) || '{}');
+            
+            const container = document.getElementById('beatsContainer');
+            container.innerHTML = beats.map((beat, i) => {
+                const content = savedBeats[i] || '';
+                const isCompleted = content.trim().length > 0;
+                return `
+                    <div class="beat-card ${isCompleted ? 'completed' : ''}" onclick="openBeatModal(${i})">
+                        <div class="beat-header">
+                            <span class="beat-number">Beat ${i + 1}</span>
+                            <span class="beat-percent">${beat.percent}</span>
+                        </div>
+                        <div class="beat-title">${beat.title}</div>
+                        <div class="beat-desc">${beat.desc}</div>
+                        <div class="beat-content">${content}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            updateProgress();
+        }
+        
+        // Update progress
+        function updateProgress() {
+            const beats = structures[currentStructure];
+            const savedBeats = JSON.parse(localStorage.getItem(`theblock_loom_${currentProject}_${currentStructure}`) || '{}');
+            
+            let completed = 0;
+            beats.forEach((_, i) => {
+                if (savedBeats[i]?.trim()) completed++;
+            });
+            
+            const percent = Math.round((completed / beats.length) * 100);
+            document.getElementById('progressValue').textContent = percent + '%';
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+        
+        // Open beat modal
+        function openBeatModal(index) {
+            currentBeatIndex = index;
+            const beat = structures[currentStructure][index];
+            const savedBeats = JSON.parse(localStorage.getItem(`theblock_loom_${currentProject}_${currentStructure}`) || '{}');
+            
+            document.getElementById('modalBeatTitle').textContent = beat.title;
+            document.getElementById('modalBeatNumber').textContent = `Beat ${index + 1} • ${beat.percent}`;
+            document.getElementById('modalBeatDesc').textContent = beat.desc;
+            document.getElementById('modalTextarea').value = savedBeats[index] || '';
+            document.getElementById('editModal').classList.add('open');
+            document.getElementById('modalTextarea').focus();
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('open');
+        }
+        
+        // Save beat
+        function saveBeat() {
+            const content = document.getElementById('modalTextarea').value;
+            const savedBeats = JSON.parse(localStorage.getItem(`theblock_loom_${currentProject}_${currentStructure}`) || '{}');
+            savedBeats[currentBeatIndex] = content;
+            localStorage.setItem(`theblock_loom_${currentProject}_${currentStructure}`, JSON.stringify(savedBeats));
+            
+            closeModal();
+            renderBeats();
+        }
+        
+        // AI Help
+        async function getAIHelp() {
+            const beat = structures[currentStructure][currentBeatIndex];
+            const textarea = document.getElementById('modalTextarea');
+            const currentContent = textarea.value;
+            
+            textarea.value = '✨ The Muse is thinking...';
+            textarea.disabled = true;
+            
+            try {
+                const response = await fetch('/.netlify/functions/muse', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        prompt: `Help me write the "${beat.title}" beat for my story. This beat should: ${beat.desc}. ${currentContent ? `Here's what I have so far: "${currentContent}". Expand on this.` : 'Give me a starting point with a specific, vivid example.'} Keep it to 2-3 sentences.`,
+                        type: 'plot',
+                        model: 'claude'
+                    })
+                });
+                
+                const data = await response.json();
+                textarea.value = currentContent ? currentContent + '\n\n' + data.response : data.response;
+            } catch (error) {
+                textarea.value = currentContent || `[${beat.title}]: Write what happens in this moment of your story...`;
+            }
+            
+            textarea.disabled = false;
+            textarea.focus();
+        }
+        
+        // Export beats
+        function exportBeats() {
+            if (!currentProject) {
+                alert('Please select a project first');
+                return;
+            }
+            
+            const beats = structures[currentStructure];
+            const savedBeats = JSON.parse(localStorage.getItem(`theblock_loom_${currentProject}_${currentStructure}`) || '{}');
+            
+            let text = `THE LOOM - Beat Sheet Export\n`;
+            text += `Structure: ${currentStructure.toUpperCase()}\n`;
+            text += `${'='.repeat(40)}\n\n`;
+            
+            beats.forEach((beat, i) => {
+                text += `[${beat.percent}] ${beat.title}\n`;
+                text += `${savedBeats[i] || '(not yet written)'}\n\n`;
+            });
+            
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'beat-sheet.txt';
+            a.click();
+        }
+        
+        // Load theme
+        const savedTheme = localStorage.getItem('theblock_theme');
+        if (savedTheme === 'zen') {
+            document.body.classList.add('zen-theme');
+        }
+        
+        // Initialize
+        loadProjects();
+    </script>
+</body>
+</html>
