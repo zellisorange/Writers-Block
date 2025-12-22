@@ -725,6 +725,8 @@
                     </svg>
                     <span>Dashboard</span>
                 </a>
+                <button class="ai-muse-btn" onclick="sealDraft()" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(16, 185, 129, 0.1)); color: #10b981;">🔒 Seal</button>
+                <button class="ai-muse-btn" onclick="messenger.openMessengerDialog(EditorState.projectId, EditorState.title, 'Author')" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.1)); color: #8b5cf6;">📨 Send</button>
                <button class="ai-muse-btn" id="aiMuseBtn" onclick="openMuseModal()">✨ Muse</button>
                 <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
                 <input 
@@ -1151,6 +1153,30 @@ The first draft is just you telling yourself the story."
             autoSave();
         }
 
+        // =====================================================
+        // SEAL FUNCTION
+        // =====================================================
+        
+        async function sealDraft() {
+          const content = DOM.writingArea.value;
+          const title = EditorState.title || 'Untitled';
+          const author = 'Author';
+          
+          if (!content || content.trim().length === 0) {
+            alert('❌ Nothing to seal! Write something first.');
+            return;
+          }
+          
+          const seal = await sealSystem.sealManuscript(
+            EditorState.projectId,
+            title,
+            content,
+            author
+          );
+          
+          alert(`✅ SEALED!\n\nTitle: ${title}\nHash: ${seal.hash.substring(0, 16)}...\n\nNow click [📨 Send] to share with an agent!`);
+        }
+
 
         // =====================================================
         // THE MUSE - AI Writing Assistant
@@ -1468,5 +1494,10 @@ The first draft is just you telling yourself the story."
 
     </script>
     
+<script src="js/seal-system/seal.js"></script>
+<script src="js/seal-system/messenger.js"></script>
+<script src="js/seal-system/dashboard.js"></script>
+
+
 </body>
 </html>
