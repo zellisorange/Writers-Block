@@ -1140,7 +1140,17 @@
                 </div>
                 
             </div>
-            
+            <!-- New Project Modal -->
+        <div class="modal-overlay" id="newProjectModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+            <div style="background: var(--bg-nebula); border-radius: 10px; padding: 30px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                <h2 style="margin: 0 0 20px 0; color: var(--text-bright);">📝 New Project</h2>
+                <input type="text" id="projectName" placeholder="Enter project title..." style="width: 100%; padding: 12px; border: 1px solid var(--glass-border); border-radius: 5px; margin-bottom: 20px; font-size: 14px; background: var(--bg-stardust); color: var(--text-primary);" autofocus>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="closeNewProjectModal()" style="flex: 1; padding: 12px; background: var(--bg-glass); border: 1px solid var(--glass-border); border-radius: 5px; color: var(--text-primary); cursor: pointer; font-weight: bold;">Cancel</button>
+                    <button onclick="createNewProjectFromModal()" style="flex: 1; padding: 12px; background: var(--lux-gold); border: none; border-radius: 5px; color: var(--bg-void); cursor: pointer; font-weight: bold;">Create</button>
+                </div>
+            </div>
+        </div>
         </main>
         
         <!-- THE ARCHITECT - Right Sidebar -->
@@ -1295,6 +1305,45 @@
         window.SupabaseAuth = window.LocalAuth;
         
         console.log('✦ Local Auth ready');
+        // New Project Modal Functions
+        function openNewProjectModal() {
+            document.getElementById('newProjectModal').style.display = 'flex';
+            document.getElementById('projectName').focus();
+        }
+
+        function closeNewProjectModal() {
+            document.getElementById('newProjectModal').style.display = 'none';
+            document.getElementById('projectName').value = '';
+        }
+
+        function createNewProjectFromModal() {
+            const title = document.getElementById('projectName').value.trim();
+            
+            if (!title) {
+                alert('Please enter a project title');
+                return;
+            }
+
+            const newProject = projectSwitcher.createAndSetProject(title);
+            closeNewProjectModal();
+            loadProjectSwitcher();
+            
+            alert(`✅ Project "${title}" created!`);
+        }
+
+        // Close modal on outside click
+        document.getElementById('newProjectModal').addEventListener('click', (e) => {
+            if (e.target.id === 'newProjectModal') {
+                closeNewProjectModal();
+            }
+        });
+
+        // Enter key to create
+        document.getElementById('projectName').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                createNewProjectFromModal();
+            }
+        });
     </script>
     
 <!-- App Script -->
