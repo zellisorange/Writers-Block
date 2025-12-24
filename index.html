@@ -1287,6 +1287,89 @@
         
     </div>
     
+<!-- Project Switcher Class -->
+    <script>
+        // PROJECT SWITCHER - Active Project Management
+        class ProjectSwitcher {
+            constructor() {
+                this.currentProject = this.loadCurrentProject();
+                this.projects = this.loadProjects();
+            }
+
+            loadCurrentProject() {
+                const current = localStorage.getItem('theblock_current_project');
+                return current ? JSON.parse(current) : null;
+            }
+
+            loadProjects() {
+                return JSON.parse(localStorage.getItem('theblock_projects') || '[]');
+            }
+
+            setCurrentProject(projectId) {
+                this.projects = this.loadProjects(); // Refresh projects list
+                const project = this.projects.find(p => p.id === projectId);
+                if (project) {
+                    this.currentProject = project;
+                    localStorage.setItem('theblock_current_project', JSON.stringify(project));
+                    return true;
+                }
+                return false;
+            }
+
+            getCurrentProject() {
+                return this.currentProject;
+            }
+
+            saveCurrentProject(content, chapters = null) {
+                if (!this.currentProject) {
+                    alert('No active project!');
+                    return false;
+                }
+                const projects = this.loadProjects();
+                const index = projects.findIndex(p => p.id === this.currentProject.id);
+                if (index >= 0) {
+                    projects[index].content = content;
+                    if (chapters) projects[index].chapters = chapters;
+                    projects[index].updatedAt = new Date().toISOString();
+                    localStorage.setItem('theblock_projects', JSON.stringify(projects));
+                    localStorage.setItem('theblock_current_project', JSON.stringify(projects[index]));
+                    this.currentProject = projects[index];
+                    return true;
+                }
+                return false;
+            }
+
+            createAndSetProject(title) {
+                const projects = this.loadProjects();
+                const newProject = {
+                    id: 'project_' + Date.now(),
+                    title: title,
+                    content: '',
+                    chapters: [{ id: 1, title: 'Chapter 1', content: '' }],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+                projects.push(newProject);
+                localStorage.setItem('theblock_projects', JSON.stringify(projects));
+                this.projects = projects; // Update internal list
+                this.setCurrentProject(newProject.id);
+                return newProject;
+            }
+
+            getAllProjects() {
+                return this.loadProjects();
+            }
+
+            getProject(projectId) {
+                return this.loadProjects().find(p => p.id === projectId);
+            }
+        }
+
+        // Create global instance
+        const projectSwitcher = new ProjectSwitcher();
+        console.log('✦ ProjectSwitcher ready');
+    </script>
+
 <!-- Local Auth System -->
     <script>
         window.LocalAuth = {
@@ -1310,7 +1393,7 @@
     
 <!-- App Script -->
 
-<script src="js/project-switcher.js"></script>
+
     <script>
         // Wait for DOM to load
         document.addEventListener('DOMContentLoaded', () => {
@@ -1606,6 +1689,6 @@
         });
     </script>
     
-    <script src="js/project-switcher.js"></script>
+  
 </body>
 </html>
