@@ -726,7 +726,7 @@
                     <span>Dashboard</span>
                 </a>
                 <button class="ai-muse-btn" onclick="sealDraft()" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(16, 185, 129, 0.1)); color: #10b981;">🔒 Seal</button>
-                <button class="ai-muse-btn" onclick="messenger.openMessengerDialog(EditorState.projectId, EditorState.title, 'Author')" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.1)); color: #8b5cf6;">📨 Send</button>
+               <button class="ai-muse-btn" onclick="openSendModal()" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.1)); color: #8b5cf6;">📨 Send</button>
                <button class="ai-muse-btn" id="aiMuseBtn" onclick="openMuseModal()">✨ Muse</button>
                 <button class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
                 <input 
@@ -1495,8 +1495,208 @@ The first draft is just you telling yourself the story."
     </script>
     
 <script src="js/seal-system/seal.js"></script>
-<script src="js/seal-system/messenger.js"></script>
 <script src="js/seal-system/dashboard.js"></script>
+
+<!-- Simple Send Modal -->
+<div id="sendModal" class="send-modal">
+    <div class="send-content">
+        <div class="send-header">
+            <h2>📨 Send Manuscript</h2>
+            <button class="send-close" onclick="closeSendModal()">×</button>
+        </div>
+        
+        <div class="send-info">
+            <p><strong>Manuscript:</strong> <span id="sendTitle">Untitled</span></p>
+            <p><strong>Author:</strong> <span id="sendAuthor">Author</span></p>
+        </div>
+        
+        <div class="send-form">
+            <label>Recipient Email</label>
+            <input type="email" id="sendEmail" placeholder="agent@agency.com">
+            
+            <label>Recipient Name</label>
+            <input type="text" id="sendName" placeholder="Agent Smith">
+            
+            <label>Your Message</label>
+            <textarea id="sendMessage" placeholder="Hi, I think my manuscript would be perfect for you..."></textarea>
+        </div>
+        
+        <div class="send-actions">
+            <button class="send-btn-cancel" onclick="closeSendModal()">Cancel</button>
+            <button class="send-btn-send" onclick="sendViaEmail()">📧 Open Email App</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .send-modal {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.85);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    .send-modal.open {
+        opacity: 1;
+        visibility: visible;
+    }
+    .send-content {
+        background: var(--bg-nebula, #0f0f12);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
+        padding: 24px;
+        width: 90%;
+        max-width: 500px;
+    }
+    .send-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    .send-header h2 {
+        color: #8b5cf6;
+        font-size: 1.3rem;
+    }
+    .send-close {
+        background: none;
+        border: none;
+        color: #a1a1aa;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    .send-info {
+        background: rgba(255,255,255,0.03);
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    .send-info p {
+        margin: 4px 0;
+        color: #a1a1aa;
+        font-size: 0.9rem;
+    }
+    .send-info strong {
+        color: #e4e4e7;
+    }
+    .send-form label {
+        display: block;
+        color: #a1a1aa;
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        margin-top: 12px;
+    }
+    .send-form input, .send-form textarea {
+        width: 100%;
+        padding: 12px;
+        background: #1a1a1d;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        color: white;
+        font-size: 0.95rem;
+    }
+    .send-form input:focus, .send-form textarea:focus {
+        outline: none;
+        border-color: #8b5cf6;
+    }
+    .send-form textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    .send-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+    }
+    .send-btn-cancel {
+        flex: 1;
+        padding: 12px;
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        color: #a1a1aa;
+        cursor: pointer;
+    }
+    .send-btn-send {
+        flex: 2;
+        padding: 12px;
+        background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .send-btn-send:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(139,92,246,0.3);
+    }
+</style>
+
+<script>
+    // Simple Send Functions
+    function openSendModal() {
+        document.getElementById('sendTitle').textContent = EditorState.title || 'Untitled';
+        document.getElementById('sendAuthor').textContent = 'Author';
+        document.getElementById('sendModal').classList.add('open');
+        document.getElementById('sendEmail').focus();
+    }
+    
+    function closeSendModal() {
+        document.getElementById('sendModal').classList.remove('open');
+    }
+    
+    function sendViaEmail() {
+        const email = document.getElementById('sendEmail').value.trim();
+        const name = document.getElementById('sendName').value.trim();
+        const message = document.getElementById('sendMessage').value.trim();
+        const title = EditorState.title || 'Untitled';
+        const content = EditorState.content || '';
+        
+        if (!email) {
+            alert('Please enter an email address');
+            return;
+        }
+        
+        // Build preview (first 500 chars)
+        const preview = content.substring(0, 500) + (content.length > 500 ? '...' : '');
+        
+        // Build email body
+        const body = `${message}
+
+---
+MANUSCRIPT: ${title}
+---
+
+PREVIEW:
+${preview}
+
+---
+Sent via THE BLOCK
+thewritersblock.llc`;
+        
+        // Build mailto link
+        const subject = encodeURIComponent(`Manuscript Submission: ${title}`);
+        const bodyEncoded = encodeURIComponent(body);
+        const mailto = `mailto:${email}?subject=${subject}&body=${bodyEncoded}`;
+        
+        // Open native email app
+        window.location.href = mailto;
+        
+        closeSendModal();
+    }
+    
+    // Close on outside click
+    document.getElementById('sendModal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'sendModal') closeSendModal();
+    });
+</script>
 
 <script src="js/project-switcher.js"></script>
 </body>
